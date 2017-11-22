@@ -1,0 +1,17 @@
+
+.scrollbar
+{
+
+	height: 300px;
+	width: 100%;
+	background: white;
+	overflow-y: scroll;
+	margin-bottom: 25px;
+}
+
+.force-overflow
+{
+	
+	
+}
+
