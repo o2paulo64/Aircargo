@@ -19,6 +19,7 @@ class Home extends CI_Controller
     // $authority=$sessionData['authority'];
     $authority=0; //means user can be anyone
 
+    $data['aircraft']=$this->EventModel->get_aircraft();
     $title['browserTitle']='Homepage';
 
     if($authority==1){
@@ -27,7 +28,7 @@ class Home extends CI_Controller
     }
     else{
       $this->load->view('includes/headUser',$title);
-      $this->load->view('home');
+      $this->load->view('home',$data);
     }
 
     $this->load->view('includes/foot');

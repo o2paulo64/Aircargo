@@ -7,7 +7,7 @@ body {
   overflow-x: hidden ! important;
   background-color: #dddddd;
   background-image: url("../images/sky.jpg");
-  background-size: cover;
+  background-size: auto;
   background-repeat: repeat;
   background-position: center;  
 
