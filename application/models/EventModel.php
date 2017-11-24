@@ -6,11 +6,10 @@ class EventModel extends CI_Model
 		parent::__construct();
 	}
 
-	function get_aircraft()
+	function get_aircraft($limit,$start)
 	{
-		$this -> db -> select('type');
-		$this -> db -> from('Aircraft');
-		$query = $this -> db -> get();
+
+		$query = $this -> db -> get('InfrastructureProject',$limit,$start);
 		
 		return $query;
  	}
