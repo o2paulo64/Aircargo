@@ -3,7 +3,8 @@
 
 body {
 
-  background-image: url("../images/sky_c.jpg");
+  /*background-image: url("../images/sky.jpg");*/
+  background-color:white;
   background-size: auto;
   background-repeat: repeat;
   background-position: center;  
@@ -16,4 +17,21 @@ body {
 }
 .icon-block .material-icons {
   font-size: inherit;
+}
+
+table.highlight > tbody > tr:hover {
+  background-color: grey;
+}
+
+.padding{
+	padding-bottom: 20px;
+}
+
+#parallax-queries{
+      height: 20em;
+}
+
+#table-container{
+
+	width: 90%;
 }

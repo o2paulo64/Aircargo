@@ -1,4 +1,4 @@
- <footer class="page-footer orange">
+ <footer class="page-footer yellow darken-3">
     <div class="container">
       <div class="row">
         <div class="col l6 s12">
@@ -33,8 +33,8 @@
 
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="<?php base_url(); ?>assets/js/materialize.js"></script>
-  <script src="<?php base_url(); ?> assets/js/init.js"></script>
+  <script type = 'text/javascript' src = "<?php echo base_url(); ?>assets/js/materialize.js"></script>
+  <script type = 'text/javascript' src = "<?php echo base_url(); ?>assets/js/init.js"></script>
 
   </body>
 </html>
