@@ -20,23 +20,64 @@ class Projects extends CI_Controller
 
     // $authority=$sessionData['authority'];
     $authority=0; //means user can be anyone 
-
+    $sort='';
     $limit_per_page = 10;
     $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 1;
-    
+    $orderBy=$this->input->get('sortBy');
 
-    $data['gov_proj']=$this->EventModel->get_gov_proj($limit_per_page,($start_index-1)*5);
-
+    if($orderBy=='region'){
+      $sort='region';
+      $order='desc';
+    }
+    elseif ($orderBy=='district'){
+      $sort='district';
+      $order='desc';
+    }
+    elseif ($orderBy=='location'){
+      $sort='location_name';
+      $order='desc';
+    }
+    elseif ($orderBy=='cost'){
+      $sort='cost';
+      $order='desc';
+    }
+    elseif ($orderBy=='district_ascending'){
+      $sort='district';
+      $order='asc';
+    }
+    elseif ($orderBy=='location_ascending'){
+      $sort='location_name';
+      $order='asc';
+    }
+    elseif ($orderBy=='cost_ascending'){
+      $sort='cost';
+      $order='asc';
+    }
+    elseif ($orderBy=='region_ascending'){
+      $sort='region';
+      $order='asc';
+    }
+    else{
+      $sort='default';
+      $order='asc';
+      $orderBy='default';
+    }
+    $data['gov_proj']=$this->EventModel->get_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order);
+    $data['sort']=$orderBy;
     // $total_records = $data['gov_proj']->num_rows();
     // $data['total']=$total_records;
     $config['base_url'] = base_url().'users/Projects/index';
+    $config['first_url']= base_url().'users/Projects/index?sortBy='.$orderBy.'';
     $config['total_rows'] = $this->EventModel->get_gov_proj_count();
     $config['per_page'] = $limit_per_page;
+
+    $config['suffix'] = '?sortBy='.$orderBy.'';
 
     $config['full_tag_open'] = '<ul class="pagination">';
     $config['full_tag_close'] = '</ul>';
 
     $config['num_links'] = 2;
+
 
     $config['first_link']='First';
     $config['first_tag_open'] = '<li class="waves-effect">';

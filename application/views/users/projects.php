@@ -6,6 +6,29 @@
 
 	<div class="section white">
 		<h5 class='padding'><center>Government Projects</center></h5>
+		<div class='row'>
+			<div class='col m1'></div>
+			<div class='col m7'><label>Sorted by <?php echo $sort?></label></div>
+			<div class="col m3"  id='sortby'>
+
+				<select class='input-field' onchange="javascript:handleSelect(this,'users/Projects?sortBy=')">
+					<option value="" disabled selected>Sort by...</option>
+					<optgroup label="Ascending Order">
+						<option value='region_ascending'>Region</option>
+						<option value='district_ascending'>District</option>
+						<option value='location_ascending'>Location</option>
+						<option value='cost_ascending'>Cost</option>
+					</optgroup>
+					<optgroup label="Descending Order">
+						<option value='region'>Region</option>
+						<option value='district'>District</option>
+						<option value='location'>Location</option>
+						<option value='cost'>Cost</option>
+					</optgroup>
+				</select>	
+			</div>
+
+		</div>
 		<div class='container' id='table-container'>
 			<table class='responsive-table bordered highlight centered blue-grey darken-1 white-text'>
 		        <thead>
@@ -56,6 +79,10 @@
 		<div class="parallax"><img src="<?php echo base_url('assets/images/p_proj2.jpg')?>"></div>
 	</div>
 
-	
+<script type="text/javascript">
 
-
+function handleSelect(elm,url)
+{	
+	window.location.href = <?php echo json_encode(base_url()); ?>+url+elm.value;
+}
+</script>

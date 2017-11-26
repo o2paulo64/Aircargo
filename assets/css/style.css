@@ -35,3 +35,7 @@ table.highlight > tbody > tr:hover {
 
 	width: 90%;
 }
+
+#sortby{
+	margin: -30px;
+}

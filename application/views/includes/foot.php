@@ -3,21 +3,21 @@
       <div class="row">
         <div class="col l6 s12">
           <h5 class="white-text">Air Cargo</h5>
-          <p class="grey-text text-lighten-4">Some more text.</p>
+          <p class="grey-text text-lighten-4">Stay updated with all government projects and the supplies being transported nationwide.</p>
 
 
         </div>
         <div class="col l3 s12">
-          <h5 class="white-text">TEXT</h5>
+          <h5 class="white-text">CONTACT US</h5>
           <ul>
-            <li><a class="white-text" href="#!">Link 1</a></li>
+            <li><a class="white-text" href="#!"></a></li>
        
           </ul>
         </div>
         <div class="col l3 s12">
-          <h5 class="white-text">MORE TEXT</h5>
+          <h5 class="white-text">ABOUT</h5>
           <ul>
-            <li><a class="white-text" href="#!">Link 1</a></li>
+            <li><a class="white-text" href="#!"></a></li>
           </ul>
         </div>
       </div>
@@ -25,7 +25,7 @@
     
 <div class="footer-copyright">
       <div class="container">
-      Made by <a class="orange-text text-lighten-3">CS 165 students</a>
+      Made by <a class="orange-text text-lighten-3">Corwyn Aboy, Paulo Gabriel Santiago, and Luis Carlo Tan</a>
       </div>
     </div>
   </footer>

@@ -27,7 +27,7 @@ class EventModel extends CI_Model
 		return $query->num_rows();
 	}
 
-	function get_gov_proj($limit,$start)
+	function get_gov_proj($limit,$start,$sort,$order)
 	{
 		$this->db->select('region,district,location_name,description,cost');
 		$this->db->from('creates as c ');
@@ -35,6 +35,8 @@ class EventModel extends CI_Model
 		$this->db->join('infrastructureoffice as o','c.office_id=o.office_id','inner');
 
 		$this->db->where('p.project_id=c.project_id and o.office_id=c.office_id');
+		if($sort!='default')
+			$this->db->order_by($sort,$order);
 		$this->db->limit($limit,$start);
 		$query = $this->db->get();
 
