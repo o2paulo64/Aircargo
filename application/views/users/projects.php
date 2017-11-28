@@ -8,9 +8,15 @@
 		<h5 class='padding'><center>Government Projects</center></h5>
 		<div class='row'>
 			<div class='col m1'></div>
-			<div class='col m7'><label>Sorted by <?php echo $sort?></label></div>
+			<div class='col m7'>
+				<form id='search-bar-css'>
+			        <div class="input-field col s6">
+			          <input id="search" type="text" class="validate">
+			          <label for="search">Search</label>
+			        </div>
+			    </form>
+			</div>
 			<div class="col m3"  id='sortby'>
-
 				<select class='input-field' onchange="javascript:handleSelect(this,'users/Projects?sortBy=')">
 					<option value="" disabled selected>Sort by...</option>
 					<optgroup label="Ascending Order">
@@ -26,6 +32,9 @@
 						<option value='cost'>Cost</option>
 					</optgroup>
 				</select>	
+				<div class='row' style='margin-top: -20px;'>
+				<label>Sorted by <?php echo $sort?></label>
+				</div>
 			</div>
 
 		</div>

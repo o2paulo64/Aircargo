@@ -6,7 +6,6 @@ class Projects extends CI_Controller
     parent::__construct();
     $this->load->library('pagination');
     $this->load->helper('url');
-    $this->load->model('UserModel','',TRUE);
     $this->load->model('EventModel','',TRUE);
   }
 

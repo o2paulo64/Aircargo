@@ -6,14 +6,6 @@ class EventModel extends CI_Model
 		parent::__construct();
 	}
 
-	function get_aircraft($limit,$start)
-	{
-
-		$query = $this -> db -> get('InfrastructureProject',$limit,$start);
-		
-		return $query;
- 	}
-	
 	function get_gov_proj_count()
 	{
 		$this->db->select('region,district,location_name,description,cost');
