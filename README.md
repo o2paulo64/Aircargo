@@ -17,4 +17,3 @@ Steps:
 	example script: *source C:\Users\paulo\Google Drive\CS 165\CS 165 - MP Group Project\Phase 4\Aircargo.sql* 
 4. Open XAMPP control panel and start the Apache and MySQL module
 5. On your web browser, preferably Google Chrome, enter the following URL: *localhost/Aircargo*
-lolol
