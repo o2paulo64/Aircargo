@@ -24,11 +24,7 @@ class Reports extends CI_Controller
     $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 1;
     $orderBy=$this->input->get('sortBy');
 
-    if($orderBy=='report_id'){
-      $sort='report_id';
-      $order='desc';
-    }
-    elseif ($orderBy=='shipping_date'){
+   if ($orderBy=='shipping_date'){
       $sort='shipping_date';
       $order='desc';
     }
@@ -44,14 +40,6 @@ class Reports extends CI_Controller
       $sort='aircraft_registration';
       $order='desc';
     }
-    elseif ($orderBy=='cargo_id'){
-      $sort='cargo_id';
-      $order='desc';
-    }
-    elseif ($orderBy=='report_id_ascending'){
-      $sort='report_id';
-      $order='asc';
-    }
     elseif ($orderBy=='shipping_date_ascending'){
       $sort='shipping_date';
       $order='asc';
@@ -66,10 +54,6 @@ class Reports extends CI_Controller
     }
     elseif ($orderBy=='aircraft_registration_ascending'){
       $sort='aircraft_registration';
-      $order='asc';
-    }
-    elseif ($orderBy=='cargo_id_ascending'){
-      $sort='cargo_id';
       $order='asc';
     }
     else{

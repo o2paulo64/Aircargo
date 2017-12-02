@@ -37,7 +37,7 @@ class EventModel extends CI_Model
 
 	function get_report_count()
 	{
-		$this->db->select('a.report_id,h.shipping_date,c.operation_name,d.airport_name,b.aircraft_registration,f.classification,f.description,b.cargo_id');
+		$this->db->select('h.shipping_date,c.operation_name,d.airport_name,b.aircraft_registration,f.classification,f.description');
 		$this->db->from('describes as a ');
 		$this->db->join('report as b','a.report_id=b.report_id','inner');
 		$this->db->join('airlineoperation as c','b.operator_id=c.operator_id','inner');
@@ -51,7 +51,7 @@ class EventModel extends CI_Model
 
 	function get_report($limit,$start,$sort,$order)
 	{
-		$this->db->select('a.report_id,h.shipping_date,c.operation_name,d.airport_name,b.aircraft_registration,f.classification,f.description,b.cargo_id');
+		$this->db->select('h.shipping_date,c.operation_name,d.airport_name,b.aircraft_registration,f.classification,f.description');
 		$this->db->from('describes as a ');
 		$this->db->join('report as b','a.report_id=b.report_id','inner');
 		$this->db->join('airlineoperation as c','b.operator_id=c.operator_id','inner');
