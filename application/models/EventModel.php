@@ -35,6 +35,7 @@ class EventModel extends CI_Model
 		$this->db->or_like('location_name',$str, 'both');
 		$this->db->or_like('description',$str, 'both');
 		$this->db->or_like('cost',$str, 'both');
+		$this->db->or_like('fundsource_type',$str, 'both');
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
