@@ -66,7 +66,7 @@ class EventModel extends CI_Model
 		return $query;
 	}
 
-		function get_cargo_count()
+	function get_cargo_count()
 	{
 		$this->db->select('a.report_id,b.aircraft_registration,a.project_id,f.location_name,a.shipping_date,d.type_of_objects,d.no_objects,d.overall_cost');
 		$this->db->from('transports as a');
@@ -94,4 +94,30 @@ class EventModel extends CI_Model
 
 		return $query;
 	}
+
+	function get_contract_count()
+	{
+		$this->db->select('contractor_name, region, district, start_date');
+		$this->db->from('contracts as a');
+		$this->db->join('contractor as b','a.contractor_id=b.contractor_id','inner');
+		$this->db->join('infrastructureoffice as c','c.office_id=a.office_id','inner');
+		$query = $this->db->get();
+
+		return $query->num_rows();
+	}
+
+	function get_contract($limit,$start,$sort,$order)
+	{
+		$this->db->select('contractor_name, region, district, start_date');
+		$this->db->from('contracts as a');
+		$this->db->join('contractor as b','a.contractor_id=b.contractor_id','inner');
+		$this->db->join('infrastructureoffice as c','c.office_id=a.office_id','inner');
+		if($sort!='default')
+			$this->db->order_by($sort,$order);
+		$this->db->limit($limit,$start);
+		$query = $this->db->get();
+
+		return $query;
+	}
+
 }

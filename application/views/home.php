@@ -95,7 +95,7 @@
 					</div>
 					<div class="card-content blue-grey darken-1 white-text">
 						<span class="card-title activator">Project Contractors</span>
-						<p><a href="#">View</a></p>
+						<p><a href="<?php echo base_url("users/Contracts"); ?>">View</a></p>
 					</div>
 					<div class="card-reveal blue-grey darken-1 white-text">
 						<span class="card-title">Project Contractors<i class="material-icons right">close</i></span>
