@@ -20,9 +20,9 @@
 				<select class='input-field' onchange="javascript:handleSelect(this,'users/Cargoes?sortBy=')">
 					<option value="" disabled selected>Sort by...</option>
 					<optgroup label="Ascending Order">
-						<option value='report_id_ascending'>Report ID</option>
+
 						<option value='aircraft_registration_ascending'>Aircraft Registration</option>
-						<option value='project_id_ascending'>Project ID</option>
+
 						<option value='location_name_ascending'>Location</option>
 						<option value='shipping_date_ascending'>Shipping Date</option>
 						<option value='type_of_objects_ascending'>Object Type</option>
@@ -30,9 +30,9 @@
 						<option value='overall_cost_ascending'>Cost</option>
 					</optgroup>
 					<optgroup label="Descending Order">
-						<option value='report_id'>Report ID</option>
+
 						<option value='aircraft_registration'>Aircraft Registration</option>
-						<option value='project_id'>Project ID</option>
+
 						<option value='location_name'>Location</option>
 						<option value='shipping_date'>Shipping Date</option>
 						<option value='type_of_objects'>Object Type</option>
@@ -50,9 +50,9 @@
 			<table class='responsive-table bordered highlight centered blue-grey darken-1 white-text'>
 		        <thead>
 		          <tr>
-		              <th>Report ID</th>
+
 		              <th>Aircraft Registration</th>
-		              <th>Project ID</th>
+
 		              <th>Location</th>
 		              <th>Shipping Date</th>
 		              <th>Object Type</th>
@@ -68,9 +68,9 @@
 					foreach ($crg_deliveries->result_array() as $cargo_row) {
 						echo "
 					<tr>
-						<td>".$cargo_row['report_id']."</td>
+
 						<td>".$cargo_row['aircraft_registration']."</td>
-						<td>".$cargo_row['project_id']."</td>
+
 						<td>".$cargo_row['location_name']."</td>
 						<td>".$cargo_row['shipping_date']."</td>
 						<td>".$cargo_row['type_of_objects']."</td>
