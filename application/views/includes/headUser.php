@@ -19,14 +19,8 @@
 		<nav class='white' role="navigation">
 			<div class="nav-wrapper container"><a id="logo-container" href="<?php echo base_url();?>home" class="brand-logo black-text center">AirCargo</a>
 				<ul class="right hide-on-med-and-down black-text">
-					<!-- <li><a class='black-text' href="#">Navbar Link</a></li>
-					<li><a class="dropdown-button black-text" href="#!" data-activates="dropdown1">Dropdown<i class="material-icons right">arrow_drop_down</i></a></li>
-					<ul id="dropdown1" class="dropdown-content">
-						<li><a href="#!">one</a></li>
-						<li><a href="#!">two</a></li>
-						<li class="divider"></li>
-						<li><a href="#!">three</a></li>
-					</ul> -->
+					<li><a class="black-text" href="<?php echo base_url();?>login" >Login<i class="material-icons right">account_circle</i></a></li>
+					
 				</ul>
 
 				<ul id="nav-mobile" class="side-nav">
@@ -35,4 +29,5 @@
 
 				<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
 			</div>
+
 		</nav>

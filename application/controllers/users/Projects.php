@@ -11,14 +11,13 @@ class Projects extends CI_Controller
 
  function index()
  {
-    // $sessionData = $this->session->userdata('logged_in');
-    // $timezone=$sessionData['timezone'];
-    // if ($timezone==NULL)
+    $sessionData = $this->session->userdata('logged_in');
     $timezone="Asia/Singapore";
     date_default_timezone_set($timezone);
-
-    // $authority=$sessionData['authority'];
-    $authority=0; //means user can be anyone 
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; //means user can be anyone 
     $sort='';
     $limit_per_page = 10;
     $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 1;
@@ -146,7 +145,7 @@ class Projects extends CI_Controller
     $title['browserTitle']='Government Projects';
     if($authority==1){
       $this->load->view('includes/head',$title);
-      $this->load->view('admin/adminHome',$data);
+      $this->load->view('users/projects',$data);
     }
     else{
       $this->load->view('includes/headUser',$title);
