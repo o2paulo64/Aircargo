@@ -79,7 +79,7 @@
 					</div>
 					<div class="card-content blue-grey darken-1 white-text">
 						<span class="card-title activator">Cargo Deliveries</span>
-						<p><a href="#">View</a></p>
+						<p><a href="<?php echo base_url("users/Cargoes"); ?>">View</a></p>
 					</div>
 					<div class="card-reveal blue-grey darken-1 white-text">
 						<span class="card-title">Cargo Deliveries<i class="material-icons right">close</i></span>

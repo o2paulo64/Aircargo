@@ -65,4 +65,33 @@ class EventModel extends CI_Model
 
 		return $query;
 	}
+
+		function get_cargo_count()
+	{
+		$this->db->select('a.report_id,b.aircraft_registration,a.project_id,f.location_name,a.shipping_date,d.type_of_objects,d.no_objects,d.overall_cost');
+		$this->db->from('transports as a');
+		$this->db->join('report as e','a.report_id=e.report_id','inner');
+		$this->db->join('aircraft as b','e.aircraft_registration=b.aircraft_registration','inner');
+		$this->db->join('cargo as d','d.cargo_id=e.cargo_id','inner');
+		$this->db->join('infrastructureproject as f','f.project_id=a.project_id','inner');
+		$query = $this->db->get();
+
+		return $query->num_rows();
+	}
+
+	function get_cargo($limit,$start,$sort,$order)
+	{
+		$this->db->select('a.report_id,b.aircraft_registration,a.project_id,f.location_name,a.shipping_date,d.type_of_objects,d.no_objects,d.overall_cost');
+		$this->db->from('transports as a');
+		$this->db->join('report as e','a.report_id=e.report_id','inner');
+		$this->db->join('aircraft as b','e.aircraft_registration=b.aircraft_registration','inner');
+		$this->db->join('cargo as d','d.cargo_id=e.cargo_id','inner');
+		$this->db->join('infrastructureproject as f','f.project_id=a.project_id','inner');
+		if($sort!='default')
+			$this->db->order_by($sort,$order);
+		$this->db->limit($limit,$start);
+		$query = $this->db->get();
+
+		return $query;
+	}
 }
