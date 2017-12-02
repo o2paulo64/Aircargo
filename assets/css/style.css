@@ -57,3 +57,13 @@ table.highlight > tbody > tr:hover {
 #card-menu a:hover{
 	color: orange;
 }
+
+#iconButton, #iconButton a{
+
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+}

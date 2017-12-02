@@ -6,7 +6,7 @@ class Reports extends CI_Controller
     parent::__construct();
     $this->load->library('pagination');
     $this->load->helper('url');
-    $this->load->model('EventModel','',TRUE);
+    $this->load->model('ReportModel','',TRUE);
   }
 
  function index()
@@ -61,13 +61,13 @@ class Reports extends CI_Controller
       $order='asc';
       $orderBy='default';
     }
-    $data['ai_report']=$this->EventModel->get_report($limit_per_page,($start_index-1)*10,$sort,$order);
+    $data['ai_report']=$this->ReportModel->get_report($limit_per_page,($start_index-1)*10,$sort,$order);
     $data['sort']=$orderBy;
     // $total_records = $data['gov_proj']->num_rows();
     // $data['total']=$total_records;
     $config['base_url'] = base_url().'users/Reports/index';
     $config['first_url']= base_url().'users/Reports/index?sortBy='.$orderBy.'';
-    $config['total_rows'] = $this->EventModel->get_report_count();
+    $config['total_rows'] = $this->ReportModel->get_report_count();
     $config['per_page'] = $limit_per_page;
 
     $config['suffix'] = '?sortBy='.$orderBy.'';

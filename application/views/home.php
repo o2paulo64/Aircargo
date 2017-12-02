@@ -28,34 +28,16 @@
 						<img class="activator" src="<?php echo base_url('assets/images/fund.jpg')?>">
 					</div>
 					<div class="card-content blue-grey darken-1 white-text">
-						<span class="card-title activator">Fund Sources</span>
+						<span class="card-title activator">Project Construction</span>
 						<p><a href="#">View</a></p>
 					</div>
 					<div class="card-reveal blue-grey darken-1 white-text">
-						<span class="card-title">Fund Sources<i class="material-icons right">close</i></span>
+						<span class="card-title">Project Construction<i class="material-icons right">close</i></span>
 						<p>Here is some more information about this product that is only revealed once clicked on.</p>
 					</div>
 	          	</div>
 	        </div>
 
-	        <div class="col m12 l4">
-	          	<div class="card blue-grey darken-1 medium" id='card-menu'>
-	            	<div class="card-image waves-effect waves-block waves-light">
-						<img class="activator" src="<?php echo base_url('assets/images/region.jpg')?>">
-					</div>
-					<div class="card-content blue-grey darken-1 white-text">
-						<span class="card-title activator">Government Regions</span>
-						<p><a href="#">View</a></p>
-					</div>
-					<div class="card-reveal blue-grey darken-1 white-text">
-						<span class="card-title">Government Regions<i class="material-icons right">close</i></span>
-						<p>Here is some more information about this product that is only revealed once clicked on.</p>
-					</div>
-	          	</div>
-	        </div>
-    	</div>	
-
-    	<div class="row">
 			<div class="col m12 l4">
 	          	<div class="card blue-grey darken-1 medium" id='card-menu'>
 	            	<div class="card-image waves-effect waves-block waves-light">
@@ -71,7 +53,11 @@
 					</div>
 	          	</div>
 	        </div>
+    	</div>	
 
+    	<div class="row">
+
+			<div class="col m12 l2"></div>
 			<div class="col m12 l4">
 	          	<div class="card blue-grey darken-1 medium" id='card-menu'>
 	            	<div class="card-image waves-effect waves-block waves-light">

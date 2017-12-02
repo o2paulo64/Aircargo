@@ -7,6 +7,14 @@
 	<div class="section white">
 		<h5 class='padding'><center>Government Projects</center></h5>
 		<div class='row'>
+			<div class='col m4'></div>
+			<div class='col m4'>
+				<?php
+					if($this->session->flashdata('editProjSuccess')==1) echo('<div class="green white-text"><center><strong>Project successfully Updated</strong></center></div>');
+				?>
+			</div>
+		</div>
+		<div class='row'>
 			<div class='col m1'></div>
 			<div class='col m7'>
 				<form id='search-bar-css' action=<?php echo base_url('users/Projects?search='); ?> method="GET">
@@ -25,16 +33,16 @@
 				<select class='input-field' onchange="javascript:handleSelect(this,'users/Projects?search=<?php echo $searchString; ?>&sortBy=')">
 					<option value="" disabled selected>Sort by...</option>
 					<optgroup label="Ascending Order">
-						<option value='region_ascending'>Region</option>
-						<option value='district_ascending'>District</option>
-						<option value='location_ascending'>Location</option>
-						<option value='cost_ascending'>Cost</option>
+						<option value='region_ascending'>Region</option'>
+						<option value='district_ascending'>District</option'>
+						<option value='location_ascending'>Location</option'>
+						<option value='cost_ascending'>Cost</option'>
 					</optgroup>
 					<optgroup label="Descending Order">
-						<option value='region'>Region</option>
-						<option value='district'>District</option>
-						<option value='location'>Location</option>
-						<option value='cost'>Cost</option>
+						<option value='region'>Region</option'>
+						<option value='district'>District</option'>
+						<option value='location'>Location</option'>
+						<option value='cost'>Cost</option'>
 					</optgroup>
 				</select>	
 			</div>
@@ -67,10 +75,46 @@
 						<td>".$proj_row['description']."</td>
 						<td>".$proj_row['cost']."</td>
 						<td>".$proj_row['fundsource_type']."</td>
+						";
+						if($authority==1){
+							echo "
+						<td>
+							<form onsubmit='return confirm(\"Are you sure you want to update this project? \")' role='form' action ='";
 				
-					</tr>
+				echo base_url('users/Projects/editProject');
+				echo "' method='POST'>
+							<center>
+							<input type='hidden' name='proj[]' value='".$proj_row['project_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['office_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['region']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['district']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['location_name']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['description']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['cost']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['fundsource_type']."'>
+							<button type='submit' id='iconButton'><i class='material-icons' title='edit'>edit</i></button></center>
+							</form>
+						</td>
 
-		        		";
+						<td>
+							<form onsubmit='return confirm(\"Are you sure you want to delete this project? \")' role='form' action ='";
+				
+				echo base_url('users/Projects/deleteProject');
+				echo "' method='POST'>
+							<center>
+							<input type='hidden' name='proj[]' value='".$proj_row['project_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['office_id']."'>
+							<button type='submit' id='iconButton'><i class='material-icons' title='delete'>delete</i></button></center>
+							</form>
+						</td>
+						
+					
+		        			";
+						}
+					echo "
+					</tr>
+					";
+
 		        	}
 		        ?>
 		        </tbody>

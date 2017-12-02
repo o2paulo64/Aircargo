@@ -5,7 +5,7 @@ class Home extends CI_Controller
   {
     parent::__construct();
     $this->load->helper('url');
-    $this->load->model('EventModel','',TRUE);
+    $this->load->model('ProjectModel','',TRUE);
   }
 
  function index()

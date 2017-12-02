@@ -6,18 +6,20 @@ class Projects extends CI_Controller
     parent::__construct();
     $this->load->library('pagination');
     $this->load->helper('url');
-    $this->load->model('EventModel','',TRUE);
+    $this->load->model('ProjectModel','',TRUE);
+    $this->load->model('UserModel','',TRUE);
   }
 
- function index()
- {
+  function index()
+  {
     $sessionData = $this->session->userdata('logged_in');
-    $timezone="Asia/Singapore";
-    date_default_timezone_set($timezone);
     if($sessionData)
       $authority=$sessionData['authority'];
     else
       $authority=0; //means user can be anyone 
+
+    $data['authority']=$authority;
+
     $sort='';
     $limit_per_page = 10;
     $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 1;
@@ -25,7 +27,7 @@ class Projects extends CI_Controller
     $searchString=$this->input->get('search');
 
     if($searchString) {
-      $search_count= $this->EventModel->search_gov_proj_count($searchString);
+      $search_count= $this->ProjectModel->search_gov_proj_count($searchString);
       $data['searchString']=$searchString;
       if($search_count==0){
         $data['searchExist']=0;
@@ -81,8 +83,8 @@ class Projects extends CI_Controller
 
     //*************************************PAGINATION***********************************//
     if($data['searchExist']){
-      $data['gov_proj']=$this->EventModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);
-      $config['total_rows'] = $this->EventModel->search_gov_proj_count($searchString);
+      $data['gov_proj']=$this->ProjectModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);
+      $config['total_rows'] = $this->ProjectModel->search_gov_proj_count($searchString);
       $data['total_rows'] = $config['total_rows'];
       $data['searchResult']=$data['total_rows'].' result/s for keyword: '.$searchString.'';
       $data['sort']=$orderBy;
@@ -93,8 +95,8 @@ class Projects extends CI_Controller
       $config['suffix'] = '?sortBy='.$orderBy.'&search='.$searchString.'';
     }
     else{
-      $data['gov_proj']=$this->EventModel->get_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order);
-      $config['total_rows'] = $this->EventModel->get_gov_proj_count();
+      $data['gov_proj']=$this->ProjectModel->get_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order);
+      $config['total_rows'] = $this->ProjectModel->get_gov_proj_count();
       $data['total_rows'] = $config['total_rows'];
 
       $data['sort']=$orderBy;
@@ -154,6 +156,107 @@ class Projects extends CI_Controller
 
     $this->load->view('includes/foot');
   }
+
+  function editProject()
+  {
+    $proj=$this->input->post('proj');
+    $data['project_id']=$proj[0];
+    $data['office_id']=$proj[1];
+    $data['region']=$proj[2];
+    $data['district']=$proj[3];
+    $data['location_name']=$proj[4];
+    $data['description']=$proj[5];
+    $data['cost']=$proj[6];
+    $data['fundsource_type']=$proj[7];
+
+    $title['browserTitle']='Government Projects';
+    $this->load->view('includes/head',$title);
+    $this->load->view('admin/editProject',$data);
+    
+
+    $this->load->view('includes/foot');   
+  }
+
+  function edit()
+  {
+    $title['browserTitle']='Government Projects';
+    $this->form_validation->set_rules('region','region', 'required');
+    $this->form_validation->set_rules('district','district', 'required');
+    $this->form_validation->set_rules('location_name','location', 'required');
+    $this->form_validation->set_rules('description','description', 'required');
+    $this->form_validation->set_rules('cost','cost', 'required');
+    $this->form_validation->set_rules('fundsource_type','fundsource_type', 'required');
+
+    if($this->form_validation->run() == FALSE)
+    {
+      $data = array(
+      'project_id' => $this->input->post('project_id'),
+      'office_id' => $this->input->post('office_id'),
+      'office_id' => $this->input->post('office_id'),
+      'region' => $this->input->post('region'),
+      'district' => $this->input->post('district'),
+      'location_name' => $this->input->post('location_name'),
+      'description' => $this->input->post('description'),
+      'cost' => $this->input->post('cost'),
+      'fundsource_type' => $this->input->post('fundsource_type')
+      );
+
+      $this->load->view('includes/head',$title);
+
+      $this->load->view('admin/editProject',$data);
+      $this->load->view('includes/foot');
+    }
+    else{
+      echo $this->input->post('project_id');
+      $ip=array(
+      'project_id' => $this->input->post('project_id'),
+      'location_name' => $this->input->post('location_name'),
+      'description' => $this->input->post('description'),
+      'cost' => $this->input->post('cost')
+      );
+      $op=array(
+        'office_id' => $this->input->post('office_id'),
+        'region' => $this->input->post('region'),
+        'district' => $this->input->post('district')
+      );
+      $cr=array(
+        'office_id' => $this->input->post('office_id'),
+        'project_id' => $this->input->post('project_id'),
+        'fundsource_type' => $this->input->post('fundsource_type')
+      );
+
+      // $data = array(
+      // 'project_id' => $this->input->post('project_id'),
+      // 'office_id' => $this->input->post('office_id'),
+      // 'office_id' => $this->input->post('office_id'),
+      // 'region' => $this->input->post('region'),
+      // 'district' => $this->input->post('district'),
+      // 'location_name' => $this->input->post('location_name'),
+      // 'description' => $this->input->post('description'),
+      // 'cost' => $this->input->post('cost'),
+      // 'fundsource_type' => $this->input->post('fundsource_type')
+      // );
+
+      $this->ProjectModel->update_proj($ip,$op,$cr);
+      $this->session->set_flashdata('editProjSuccess',1);
+      redirect('users/Projects');
+    }
+  }
+
+  function deleteProject()
+  {
+    $proj=$this->input->post('proj');
+    $data['pid']=$proj[0];
+    $data['oid']=$proj[1];
+
+    $title['browserTitle']='Government Projects';
+    $this->load->view('includes/head',$title);
+    $this->load->view('home',$data);
+    
+
+    $this->load->view('includes/foot');   
+  }
 }
+
 
 ?>

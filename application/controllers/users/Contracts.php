@@ -6,7 +6,7 @@ class Contracts extends CI_Controller
     parent::__construct();
     $this->load->library('pagination');
     $this->load->helper('url');
-    $this->load->model('EventModel','',TRUE);
+    $this->load->model('ContractorModel','',TRUE);
   }
 
  function index()
@@ -61,13 +61,13 @@ class Contracts extends CI_Controller
       $order='asc';
       $orderBy='default';
     }
-    $data['prj_contractors']=$this->EventModel->get_contract($limit_per_page,($start_index-1)*10,$sort,$order);
+    $data['prj_contractors']=$this->ContractorModel->get_contract($limit_per_page,($start_index-1)*10,$sort,$order);
     $data['sort']=$orderBy;
     // $total_records = $data['gov_proj']->num_rows();
     // $data['total']=$total_records;
     $config['base_url'] = base_url().'users/Contracts/index';
     $config['first_url']= base_url().'users/Contracts/index?sortBy='.$orderBy.'';
-    $config['total_rows'] = $this->EventModel->get_contract_count();
+    $config['total_rows'] = $this->ContractorModel->get_contract_count();
     $config['per_page'] = $limit_per_page;
 
     $config['suffix'] = '?sortBy='.$orderBy.'';
