@@ -43,3 +43,17 @@ table.highlight > tbody > tr:hover {
 #search-bar-css{
 	margin: -30px;
 }
+
+#card-menu{
+	margin: 50px; 
+	height: 20em;
+
+}
+
+#card-menu a{
+	color: #ffab40;
+}
+
+#card-menu a:hover{
+	color: orange;
+}

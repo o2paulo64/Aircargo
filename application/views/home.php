@@ -7,7 +7,7 @@
 	<div class="section white">
 		<div class="row">
 	        <div class="col m12 l4">
-	          	<div class="card blue-grey darken-1 medium" style='margin: 50px; height: 20em;'>
+	          	<div class="card blue-grey darken-1 medium" id='card-menu'>
 	            	<div class="card-image waves-effect waves-block waves-light">
 						<img class="activator" src="<?php echo base_url('assets/images/proj.jpg')?>">
 					</div>
@@ -23,7 +23,7 @@
 	        </div>
 
 	        <div class="col m12 l4">
-	          	<div class="card blue-grey darken-1 medium" style='margin: 50px; height: 20em;'>
+	          	<div class="card blue-grey darken-1 medium" id='card-menu'>
 	            	<div class="card-image waves-effect waves-block waves-light">
 						<img class="activator" src="<?php echo base_url('assets/images/fund.jpg')?>">
 					</div>
@@ -39,7 +39,7 @@
 	        </div>
 
 	        <div class="col m12 l4">
-	          	<div class="card blue-grey darken-1 medium" style='margin: 50px; height: 20em;'>
+	          	<div class="card blue-grey darken-1 medium" id='card-menu'>
 	            	<div class="card-image waves-effect waves-block waves-light">
 						<img class="activator" src="<?php echo base_url('assets/images/region.jpg')?>">
 					</div>
@@ -57,7 +57,7 @@
 
     	<div class="row">
 			<div class="col m12 l4">
-	          	<div class="card blue-grey darken-1 medium" style='margin: 50px; height: 20em;'>
+	          	<div class="card blue-grey darken-1 medium" id='card-menu'>
 	            	<div class="card-image waves-effect waves-block waves-light">
 						<img class="activator" src="<?php echo base_url('assets/images/incident.jpg')?>">
 					</div>
@@ -73,7 +73,7 @@
 	        </div>
 
 			<div class="col m12 l4">
-	          	<div class="card blue-grey darken-1 medium" style='margin: 50px; height: 20em;'>
+	          	<div class="card blue-grey darken-1 medium" id='card-menu'>
 	            	<div class="card-image waves-effect waves-block waves-light">
 						<img class="activator" src="<?php echo base_url('assets/images/cargo.jpg')?>">
 					</div>
@@ -89,7 +89,7 @@
 	        </div>
 
 	        <div class="col m12 l4">
-	          	<div class="card blue-grey darken-1 medium" style='margin: 50px; height: 20em;'>
+	          	<div class="card blue-grey darken-1 medium" id='card-menu'>
 	            	<div class="card-image waves-effect waves-block waves-light">
 						<img class="activator" src="<?php echo base_url('assets/images/contractor.jpg')?>">
 					</div>

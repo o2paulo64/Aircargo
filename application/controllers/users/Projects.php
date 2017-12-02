@@ -23,6 +23,24 @@ class Projects extends CI_Controller
     $limit_per_page = 10;
     $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 1;
     $orderBy=$this->input->get('sortBy');
+    $searchString=$this->input->get('search');
+
+    if($searchString) {
+      $search_count= $this->EventModel->search_gov_proj_count($searchString);
+      $data['searchString']=$searchString;
+      if($search_count==0){
+        $data['searchExist']=0;
+        $data['searchResult']='No results for keyword: '.$searchString.'';
+      }
+      else {
+        $data['searchExist']=1;
+      }
+    }else{
+      $data['searchExist']=0;
+      $data['searchResult']='';
+    } 
+    
+    $data['searchString']=$searchString;
 
     if($orderBy=='region'){
       $sort='region';
@@ -61,16 +79,34 @@ class Projects extends CI_Controller
       $order='asc';
       $orderBy='default';
     }
-    $data['gov_proj']=$this->EventModel->get_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order);
-    $data['sort']=$orderBy;
-    // $total_records = $data['gov_proj']->num_rows();
-    // $data['total']=$total_records;
-    $config['base_url'] = base_url().'users/Projects/index';
-    $config['first_url']= base_url().'users/Projects/index?sortBy='.$orderBy.'';
-    $config['total_rows'] = $this->EventModel->get_gov_proj_count();
-    $config['per_page'] = $limit_per_page;
 
-    $config['suffix'] = '?sortBy='.$orderBy.'';
+    //*************************************PAGINATION***********************************//
+    if($data['searchExist']){
+      $data['gov_proj']=$this->EventModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);
+      $config['total_rows'] = $this->EventModel->search_gov_proj_count($searchString);
+      $data['total_rows'] = $config['total_rows'];
+      $data['searchResult']=$data['total_rows'].' result/s for keyword: '.$searchString.'';
+      $data['sort']=$orderBy;
+      $config['base_url'] = base_url().'users/Projects/index';
+      $config['first_url']= base_url().'users/Projects/index?sortBy='.$orderBy.'&search='.$searchString.'';
+      $config['per_page'] = $limit_per_page;
+      $config['uri_segment'] = 4;
+      $config['suffix'] = '?sortBy='.$orderBy.'&search='.$searchString.'';
+    }
+    else{
+      $data['gov_proj']=$this->EventModel->get_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order);
+      $config['total_rows'] = $this->EventModel->get_gov_proj_count();
+      $data['total_rows'] = $config['total_rows'];
+
+      $data['sort']=$orderBy;
+      $config['base_url'] = base_url().'users/Projects/index';
+      $config['first_url']= base_url().'users/Projects/index?sortBy='.$orderBy.'';
+      $config['per_page'] = $limit_per_page;
+      $config['uri_segment'] = 4;
+      $config['suffix'] = '?sortBy='.$orderBy.'';
+    }
+
+
 
     $config['full_tag_open'] = '<ul class="pagination">';
     $config['full_tag_close'] = '</ul>';
@@ -97,7 +133,7 @@ class Projects extends CI_Controller
     $config['num_tag_open'] = '<li class="waves-effect">';
     $config['num_tag_close'] = '</li>';
     
-    $config["uri_segment"] = 4;
+    
     $config['use_page_numbers'] = TRUE;
 
     $this->pagination->initialize($config);
@@ -105,6 +141,7 @@ class Projects extends CI_Controller
     // build paging links
     $data["links"] = $this->pagination->create_links(); 
 
+    //*****************************END OF PAGINATION*********************************//
 
     $title['browserTitle']='Government Projects';
     if($authority==1){

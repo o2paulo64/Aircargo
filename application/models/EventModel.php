@@ -8,30 +8,52 @@ class EventModel extends CI_Model
 
 	function get_gov_proj_count()
 	{
-		$this->db->select('region,district,location_name,description,cost');
-		$this->db->from('creates as c ');
-		$this->db->join('infrastructureproject as p','c.project_id=p.project_id','natural');
-		$this->db->join('infrastructureoffice as o','c.office_id=o.office_id','inner');
-
-		$this->db->where('p.project_id=c.project_id and o.office_id=c.office_id');
+		$this->db->select('*');
+		$this->db->from('gov_projects');
 		$query = $this->db->get();
-
 		return $query->num_rows();
 	}
 
 	function get_gov_proj($limit,$start,$sort,$order)
 	{
-		$this->db->select('region,district,location_name,description,cost');
-		$this->db->from('creates as c ');
-		$this->db->join('infrastructureproject as p','c.project_id=p.project_id','natural');
-		$this->db->join('infrastructureoffice as o','c.office_id=o.office_id','inner');
-
-		$this->db->where('p.project_id=c.project_id and o.office_id=c.office_id');
+		$this->db->select('*');
+		$this->db->from('gov_projects');
 		if($sort!='default')
 			$this->db->order_by($sort,$order);
 		$this->db->limit($limit,$start);
 		$query = $this->db->get();
 
+		return $query;
+	}
+
+	function search_gov_proj_count($str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('gov_projects');
+		$this->db->like('region',$str, 'both');
+		$this->db->or_like('district',$str, 'both');
+		$this->db->or_like('location_name',$str, 'both');
+		$this->db->or_like('description',$str, 'both');
+		$this->db->or_like('cost',$str, 'both');
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+
+	function search_gov_proj($limit,$start,$sort,$order,$str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('gov_projects');
+		$this->db->like('region',$str, 'both');
+		$this->db->or_like('district',$str, 'both');
+		$this->db->or_like('location_name',$str, 'both');
+		$this->db->or_like('description',$str, 'both');
+		$this->db->or_like('cost',$str, 'both');
+		$this->db->or_like('fundsource_type',$str, 'both');
+
+		if($sort!='default')
+			$this->db->order_by($sort,$order);
+		$this->db->limit($limit,$start);
+		$query = $this->db->get();
 		return $query;
 	}
 }
