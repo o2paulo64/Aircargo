@@ -1,5 +1,5 @@
 <?php
-class ReportModel extends CI_Model
+class CargoModel extends CI_Model
 {
 	function __construct() 
 	{
@@ -9,7 +9,7 @@ class ReportModel extends CI_Model
 	function get_gov_proj_count()
 	{
 		$this->db->select('*');
-		$this->db->from('v_ai_report');
+		$this->db->from('v_cargo_delivery');
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -17,7 +17,7 @@ class ReportModel extends CI_Model
 	function get_gov_proj($limit,$start,$sort,$order)
 	{
 		$this->db->select('*');
-		$this->db->from('v_ai_report');
+		$this->db->from('v_cargo_delivery');
 		if($sort!='default')
 			$this->db->order_by($sort,$order);
 		$this->db->limit($limit,$start);
@@ -29,12 +29,18 @@ class ReportModel extends CI_Model
 	function search_gov_proj_count($str)
 	{
 		$this->db->select('*');
-		$this -> db -> from('v_ai_report');
+		$this -> db -> from('v_cargo_delivery');
+		$this->db->or_like('type_of_objects',$str, 'both');
+		$this->db->or_like('no_objects',$str, 'both');
+		$this->db->or_like('overall_cost',$str, 'both');
+		$this->db->or_like('type',$str, 'both');
 		$this->db->or_like('operation_name',$str, 'both');
 		$this->db->or_like('airport_name',$str, 'both');
-		$this->db->or_like('aircraft_registration',$str, 'both');
-		$this->db->or_like('classification',$str, 'both');
+		$this->db->or_like('rnum',$str, 'both');
+		$this->db->or_like('location_name',$str, 'both');
 		$this->db->or_like('description',$str, 'both');
+		$this->db->or_like('cost',$str, 'both');
+		$this->db->or_like('shipping_date',$str, 'both');
 		$query = $this->db->get();
 		return $query->num_rows();
 	}
@@ -42,12 +48,19 @@ class ReportModel extends CI_Model
 	function search_gov_proj($limit,$start,$sort,$order,$str)
 	{
 		$this->db->select('*');
-		$this -> db -> from('v_ai_report');
+		$this -> db -> from('v_cargo_delivery');
+		$this -> db -> from('v_cargo_delivery');
+		$this->db->or_like('type_of_objects',$str, 'both');
+		$this->db->or_like('no_objects',$str, 'both');
+		$this->db->or_like('overall_cost',$str, 'both');
+		$this->db->or_like('type',$str, 'both');
 		$this->db->or_like('operation_name',$str, 'both');
 		$this->db->or_like('airport_name',$str, 'both');
-		$this->db->or_like('aircraft_registration',$str, 'both');
-		$this->db->or_like('classification',$str, 'both');
+		$this->db->or_like('rnum',$str, 'both');
+		$this->db->or_like('location_name',$str, 'both');
 		$this->db->or_like('description',$str, 'both');
+		$this->db->or_like('cost',$str, 'both');
+		$this->db->or_like('shipping_date',$str, 'both');
 
 		if($sort!='default')
 			$this->db->order_by($sort,$order);
@@ -56,23 +69,28 @@ class ReportModel extends CI_Model
 		return $query;
 	}
 
-	function update_proj($ip,$op,$cr,$t)
+	function update_proj($ip,$op,$cr,$carg,$infra,$trans)
 	{
 		
 
 		$this->db->where('airport_id',$ip['airport_id']);
 		$this->db->update('Airport',$ip);
 
-		$this->db->where('aircraft_registration',$op['aircraft_registration']);
-		$this->db->update('Aircraft',$op);
+		$this->db->where('operator_id',$op['operator_id']);
+		$this->db->update('AirlineOperation',$op);
 
-		$this->db->where('operator_id',$cr['operator_id']);
-		$this->db->update('AirlineOperation',$cr);
+		$this->db->where('aircraft_registration',$cr['aircraft_registration']);
+		$this->db->update('Aircraft',$cr);
 
-		$this->db->where('typeno',$t['typeno']);
-		$this->db->update('Type',$t);
+		$this->db->where('cargo_id',$carg['cargo_id']);
+		$this->db->update('Cargo',$carg);
 
+		$this->db->where('project_id',$infra['project_id']);
+		$this->db->update('InfrastructureProject',$infra);
 
+		$this->db->where('report_id',$trans['report_id']);
+		$this->db->where('project_id',$trans['project_id']);
+		$this->db->update('transports',$trans);
 	}
 
 	function create_proj1($ip)
@@ -112,29 +130,10 @@ class ReportModel extends CI_Model
 
 	}
 
-	function create_proj4($t)
+	function create_proj4($carg)
 	{
 		
-		$this->db->insert('Type',$t);
-
-		$this->db->select_max('typeno');
-		$query = $this->db->get('Type');
-		foreach ($query->result_array() as $row) {
-			$ans=$row['typeno'];
-		}
-		return $ans;
-
-	}
-
-	function create_cargo()
-	{
-		$data=array(
-			'type_of_objects' => 'To be Updated',
-			'overall_cost' => 0,
-			'no_objects' => 0
-		);
-
-		$this->db->insert('Cargo',$data);
+		$this->db->insert('Cargo',$carg);
 
 		$this->db->select_max('cargo_id');
 		$query = $this->db->get('Cargo');
@@ -142,9 +141,24 @@ class ReportModel extends CI_Model
 			$ans=$row['cargo_id'];
 		}
 		return $ans;
+
 	}
 
-	function create_proj5($r)
+	function create_proj5($infra)
+	{
+		
+		$this->db->insert('InfrastructureProject',$infra);
+
+		$this->db->select_max('project_id');
+		$query = $this->db->get('InfrastructureProject');
+		foreach ($query->result_array() as $row) {
+			$ans=$row['project_id'];
+		}
+		return $ans;
+
+	}
+
+	function create_proj6($r)
 	{
 		$this->db->insert('Report',$r);
 		$this->db->select_max('report_id');
@@ -156,9 +170,9 @@ class ReportModel extends CI_Model
 
 	}
 
-	function create_proj6($descr)
+	function create_proj7($trans)
 	{
-		$this->db->insert('describes',$descr);
+		$this->db->insert('transports',$trans);
 	}
 
 	function delete_proj($data)
@@ -173,8 +187,11 @@ class ReportModel extends CI_Model
 		$this->db->where('operator_id',$data['operator_id']);
 		$this->db->delete('AirlineOperation');
 
-		$this->db->where('typeno',$data['typeno']);
-		$this->db->delete('Type');
+		$this->db->where('cargo_id',$data['cargo_id']);
+		$this->db->delete('Cargo');
+
+		$this->db->where('project_id',$data['project_id']);
+		$this->db->delete('InfrastructureProject');
 
 		$this->db->where('report_id',$data['report_id']);
 		$this->db->where('operator_id',$data['operator_id']);
@@ -182,8 +199,8 @@ class ReportModel extends CI_Model
 		$this->db->delete('report');
 
 		$this->db->where('report_id',$data['report_id']);
-		$this->db->where('typeno',$data['typeno']);
-		$this->db->delete('describes');
+		$this->db->where('project_id',$data['project_id']);
+		$this->db->delete('transports');
 
 
 	}

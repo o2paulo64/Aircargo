@@ -29,11 +29,11 @@
 					</div>
 					<div class="card-content blue-grey darken-1 white-text">
 						<span class="card-title activator">Project Construction</span>
-						<p><a href="#">View</a></p>
+						<p><a href="<?php echo base_url("users/Constructs"); ?>">View</a></p>
 					</div>
 					<div class="card-reveal blue-grey darken-1 white-text">
 						<span class="card-title">Project Construction<i class="material-icons right">close</i></span>
-						<p>Here is some more information about this product that is only revealed once clicked on.</p>
+						<p>Construction Details on various locations</p>
 					</div>
 	          	</div>
 	        </div>
@@ -49,7 +49,7 @@
 					</div>
 					<div class="card-reveal blue-grey darken-1 white-text">
 						<span class="card-title">Accident / Incident Reports<i class="material-icons right">close</i></span>
-						<p>Here is some more information about this product that is only revealed once clicked on.</p>
+						<p> Reports of accidents and incidents with planes.</p>
 					</div>
 	          	</div>
 	        </div>
@@ -69,7 +69,7 @@
 					</div>
 					<div class="card-reveal blue-grey darken-1 white-text">
 						<span class="card-title">Cargo Deliveries<i class="material-icons right">close</i></span>
-						<p>Here is some more information about this product that is only revealed once clicked on.</p>
+						<p>Deliveries of cargo with details on which planes carries them and the cargo's cost.</p>
 					</div>
 	          	</div>
 	        </div>
@@ -85,7 +85,7 @@
 					</div>
 					<div class="card-reveal blue-grey darken-1 white-text">
 						<span class="card-title">Project Contractors<i class="material-icons right">close</i></span>
-						<p>Here is some more information about this product that is only revealed once clicked on.</p>
+						<p>Contractors for projects, dates and the area where they are.</p>
 					</div>
 	          	</div>
 	        </div>

@@ -1,85 +1,176 @@
 
 
 	<div class="parallax-container" >
-		<div class="parallax"><img src="<?php echo base_url('assets/images/p_proj.jpg')?>"></div>
+		<div class="parallax"><img src="<?php echo base_url('assets/images/cargo2.jpg')?>"></div>
 	</div>
 
 	<div class="section white">
-		<h5 class='padding'><center>Cargo Deliveries</center></h5>
+		<h5 class='padding'><center>Government Cargoes</center></h5>
+		<div class='row'>
+			<div class='col m4'></div>
+			<div class='col m4'>
+				<?php
+					if($this->session->flashdata('editProjSuccess')==1) echo('<div class="green white-text"><center><strong>Cargo successfully Updated</strong></center></div>');
+					else if($this->session->flashdata('deleteProjSuccess')==1) echo('<div class="green white-text"><center><strong>Cargo successfully Deleted</strong></center></div>');
+					else if($this->session->flashdata('createProjSuccess')==1) echo('<div class="green white-text"><center><strong>Cargo successfully created</strong></center></div>');
+				?>
+			</div>
+		</div>
 		<div class='row'>
 			<div class='col m1'></div>
 			<div class='col m7'>
-				<form id='search-bar-css'>
+				<form id='search-bar-css' action=<?php echo base_url('users/Cargoes?search='); ?> method="GET">
 			        <div class="input-field col s6">
-			          <input id="search" type="text" class="validate">
+			          <input name="search" type="text" class="validate">
 			          <label for="search">Search</label>
+
 			        </div>
+
+
 			    </form>
+			        
+			    
 			</div>
 			<div class="col m3"  id='sortby'>
-				<select class='input-field' onchange="javascript:handleSelect(this,'users/Cargoes?sortBy=')">
+				<select class='input-field' onchange="javascript:handleSelect(this,'users/Cargoes?search=<?php echo $searchString; ?>&sortBy=')">
 					<option value="" disabled selected>Sort by...</option>
 					<optgroup label="Ascending Order">
-
-						<option value='aircraft_registration_ascending'>Aircraft Registration</option>
-
-						<option value='location_name_ascending'>Location</option>
-						<option value='shipping_date_ascending'>Shipping Date</option>
-						<option value='type_of_objects_ascending'>Object Type</option>
-						<option value='no_objects_ascending'># of Objects</option>
-						<option value='overall_cost_ascending'>Cost</option>
+						<option value='type_of_objects_ascending'>Type of Object</option'>
+						<option value='no_objects_ascending'>Number of Objects</option'>
+						<option value='overall_cost_ascending'>Overall Cost</option'>
+						<option value='type_ascending'>Type</option'>
+						<option value='operation_name_ascending'>Operation Name</option'>
+						<option value='airport_name_ascending'>Airport Name</option'>
+						<option value='rnum_ascending'>rnum</option'>
+						<option value='location_name_ascending'>Location Name</option'>
+						<option value='description_ascending'>Description</option'>
+						<option value='cost_ascending'>Cost</option'>
+						<option value='shipping_date_ascending'>Shipping Date</option'>
 					</optgroup>
 					<optgroup label="Descending Order">
-
-						<option value='aircraft_registration'>Aircraft Registration</option>
-
-						<option value='location_name'>Location</option>
-						<option value='shipping_date'>Shipping Date</option>
-						<option value='type_of_objects'>Object Type</option>
-						<option value='no_objects'># of Objects</option>
-						<option value='overall_cost'>Cost</option>
+						<option value='type_of_objects'>Type of Object</option'>
+						<option value='no_objects'>Number of Objects</option'>
+						<option value='overall_cost'>Overall Cost</option'>
+						<option value='type'>Type</option'>
+						<option value='operation_name'>Operation Name</option'>
+						<option value='airport_name'>Airport Name</option'>
+						<option value='rnum'>rnum</option'>
+						<option value='location_name'>Location Name</option'>
+						<option value='description'>Description</option'>
+						<option value='cost'>Cost</option'>
+						<option value='shipping_date'>Shipping Date</option'>
 					</optgroup>
 				</select>	
-				<div class='row' style='margin-top: -20px;'>
-				<label>Sorted by <?php echo $sort?></label>
-				</div>
 			</div>
 
 		</div>
 		<div class='container' id='table-container'>
+			<label style='float: left;'><?php echo $searchResult;?></label>
+			<label style='float: right;'>Sorted by <?php echo $sort;?></label>
 			<table class='responsive-table bordered highlight centered blue-grey darken-1 white-text'>
 		        <thead>
 		          <tr>
-
-		              <th>Aircraft Registration</th>
-
+		              <th>Type of Object</th>
+		              <th>Number of Objects</th>
+		              <th>Overall cost</th>
+		              <th>Aircraft</th>
+		              <th>Operation Name</th>
+		              <th>Airport Name</th>
+		              <th>Region</th>
 		              <th>Location</th>
-		              <th>Shipping Date</th>
-		              <th>Object Type</th>
-		              <th># of Objects</th>
+		              <th>Description</th>
 		              <th>Cost</th>
+		              <th>Shipping Date</th>
+		              <th></th>
+		              <?php 
+		              	if($authority==1){
+		              		echo"
+						<td>
+							<form onsubmit='return confirm(\"Are you sure you want to create new Cargo? \")' role='form' action ='";
+				
+				echo base_url('users/Cargoes/createCargo');
+				echo "' method='POST'>
+							<center>
+							<button type='submit' id='iconButton'><i class='material-icons' title='Create new Cargo'>fiber_new</i></button></center>
+							</form>
+						</td>
+		              		";
+		              	}
+		              ?>
+
 		          </tr>
 		        </thead>
 
 		        <tbody>
 
 		        <?php
-
-					foreach ($crg_deliveries->result_array() as $cargo_row) {
+					foreach ($gov_proj->result_array() as $proj_row) {
 						echo "
 					<tr>
-
-						<td>".$cargo_row['aircraft_registration']."</td>
-
-						<td>".$cargo_row['location_name']."</td>
-						<td>".$cargo_row['shipping_date']."</td>
-						<td>".$cargo_row['type_of_objects']."</td>
-						<td>".$cargo_row['no_objects']."</td>
-						<td>".$cargo_row['overall_cost']."</td>
+						<td>".$proj_row['type_of_objects']."</td>
+						<td>".$proj_row['no_objects']."</td>
+						<td>".$proj_row['overall_cost']."</td>
+						<td>".$proj_row['type']."</td>
+						<td>".$proj_row['operation_name']."</td>
+						<td>".$proj_row['airport_name']."</td>
+						<td>".$proj_row['rnum']."</td>
+						<td>".$proj_row['location_name']."</td>
+						<td>".$proj_row['description']."</td>
+						<td>".$proj_row['cost']."</td>
+						<td>".$proj_row['shipping_date']."</td>
+						";
+						if($authority==1){
+							echo "
+						<td>
+							<form onsubmit='return confirm(\"Are you sure you want to update this Cargo? \")' role='form' action ='";
 				
-					</tr>
+				echo base_url('users/Cargoes/editCargo');
+				echo "' method='POST'>
+							<center>
+							<input type='hidden' name='proj[]' value='".$proj_row['report_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['project_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['operator_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['airport_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['cargo_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['aircraft_registration']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['type_of_objects']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['no_objects']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['overall_cost']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['type']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['operation_name']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['airport_name']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['rnum']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['location_name']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['description']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['cost']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['shipping_date']."'>
+							<button type='submit' id='iconButton'><i class='material-icons' title='edit'>edit</i></button></center>
+							</form>
+						</td>
 
-		        		";
+						<td>
+							<form onsubmit='return confirm(\"Are you sure you want to delete this Cargo? \")' role='form' action ='";
+				
+				echo base_url('users/Cargoes/deleteCargo');
+				echo "' method='POST'>
+							<center>
+							<input type='hidden' name='proj[]' value='".$proj_row['report_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['project_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['operator_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['airport_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['cargo_id']."'>
+							<input type='hidden' name='proj[]' value='".$proj_row['aircraft_registration']."'>
+							<button type='submit' id='iconButton'><i class='material-icons' title='delete'>delete</i></button></center>
+							</form>
+						</td>
+						
+					
+		        			";
+						}
+					echo "
+					</tr>
+					";
+
 		        	}
 		        ?>
 		        </tbody>
@@ -99,7 +190,7 @@
 	</div>
 
 	<div class="parallax-container">
-		<div class="parallax"><img src="<?php echo base_url('assets/images/p_proj2.jpg')?>"></div>
+		<div class="parallax"><img src="<?php echo base_url('assets/images/cargo1.jpeg')?>"></div>
 	</div>
 
 <script type="text/javascript">

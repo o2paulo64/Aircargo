@@ -1,12 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Projects extends CI_Controller 
+class Constructs extends CI_Controller 
 {
   function __construct()
   {
     parent::__construct();
     $this->load->library('pagination');
     $this->load->helper('url');
-    $this->load->model('ProjectModel','',TRUE);
+    $this->load->model('ConstructModel','',TRUE);
   }
 
   function index()
@@ -26,7 +26,7 @@ class Projects extends CI_Controller
     $searchString=$this->input->get('search');
 
     if($searchString) {
-      $search_count= $this->ProjectModel->search_gov_proj_count($searchString);
+      $search_count= $this->ConstructModel->search_gov_proj_count($searchString);
       $data['searchString']=$searchString;
       if($search_count==0){
         $data['searchExist']=0;
@@ -42,36 +42,52 @@ class Projects extends CI_Controller
     
     $data['searchString']=$searchString;
 
-    if($orderBy=='region'){
-      $sort='region';
-      $order='desc';
-    }
-    elseif ($orderBy=='district'){
-      $sort='district';
-      $order='desc';
-    }
-    elseif ($orderBy=='location'){
+    if($orderBy=='location_name'){
       $sort='location_name';
+      $order='desc';
+    }
+    elseif ($orderBy=='description'){
+      $sort='description';
       $order='desc';
     }
     elseif ($orderBy=='cost'){
       $sort='cost';
       $order='desc';
     }
-    elseif ($orderBy=='district_ascending'){
-      $sort='district';
+    elseif ($orderBy=='contractor_name'){
+      $sort='contractor_name';
+      $order='desc';
+    }
+    elseif ($orderBy=='actual_start'){
+      $sort='actual_start';
+      $order='desc';
+    }
+    elseif ($orderBy=='actual_completion'){
+      $sort='actual_completion';
+      $order='desc';
+    }
+    else if($orderBy=='location_name_ascending'){
+      $sort='location_name';
       $order='asc';
     }
-    elseif ($orderBy=='location_ascending'){
-      $sort='location_name';
+    elseif ($orderBy=='description_ascending'){
+      $sort='description';
       $order='asc';
     }
     elseif ($orderBy=='cost_ascending'){
       $sort='cost';
       $order='asc';
     }
-    elseif ($orderBy=='region_ascending'){
-      $sort='region';
+    elseif ($orderBy=='contractor_name_ascending'){
+      $sort='contractor_name';
+      $order='asc';
+    }
+    elseif ($orderBy=='actual_start_ascending'){
+      $sort='actual_start';
+      $order='asc';
+    }
+    elseif ($orderBy=='actual_completion_ascending'){
+      $sort='actual_completion';
       $order='asc';
     }
     else{
@@ -82,25 +98,25 @@ class Projects extends CI_Controller
 
     //*************************************PAGINATION***********************************//
     if($data['searchExist']){
-      $data['gov_proj']=$this->ProjectModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);
-      $config['total_rows'] = $this->ProjectModel->search_gov_proj_count($searchString);
+      $data['gov_proj']=$this->ConstructModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);
+      $config['total_rows'] = $this->ConstructModel->search_gov_proj_count($searchString);
       $data['total_rows'] = $config['total_rows'];
       $data['searchResult']=$data['total_rows'].' result/s for keyword: '.$searchString.'';
       $data['sort']=$orderBy;
-      $config['base_url'] = base_url().'users/Projects/index';
-      $config['first_url']= base_url().'users/Projects/index?sortBy='.$orderBy.'&search='.$searchString.'';
+      $config['base_url'] = base_url().'users/Constructs/index';
+      $config['first_url']= base_url().'users/Constructs/index?sortBy='.$orderBy.'&search='.$searchString.'';
       $config['per_page'] = $limit_per_page;
       $config['uri_segment'] = 4;
       $config['suffix'] = '?sortBy='.$orderBy.'&search='.$searchString.'';
     }
     else{
-      $data['gov_proj']=$this->ProjectModel->get_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order);
-      $config['total_rows'] = $this->ProjectModel->get_gov_proj_count();
+      $data['gov_proj']=$this->ConstructModel->get_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order);
+      $config['total_rows'] = $this->ConstructModel->get_gov_proj_count();
       $data['total_rows'] = $config['total_rows'];
 
       $data['sort']=$orderBy;
-      $config['base_url'] = base_url().'users/Projects/index';
-      $config['first_url']= base_url().'users/Projects/index?sortBy='.$orderBy.'';
+      $config['base_url'] = base_url().'users/Constructs/index';
+      $config['first_url']= base_url().'users/Constructs/index?sortBy='.$orderBy.'';
       $config['per_page'] = $limit_per_page;
       $config['uri_segment'] = 4;
       $config['suffix'] = '?sortBy='.$orderBy.'';
@@ -143,32 +159,32 @@ class Projects extends CI_Controller
 
     //*****************************END OF PAGINATION*********************************//
 
-    $title['browserTitle']='Government Projects';
+    $title['browserTitle']='Government Constructs';
     if($authority==1){
       $this->load->view('includes/head',$title);
-      $this->load->view('users/projects',$data);
+      $this->load->view('users/Constructs',$data);
     }
     else{
       $this->load->view('includes/headUser',$title);
-      $this->load->view('users/projects',$data);
+      $this->load->view('users/Constructs',$data);
     }
 
     $this->load->view('includes/foot');
   }
 
-  function editProject()
+  function editConstruct()
   {
     $proj=$this->input->post('proj');
     $data['project_id']=$proj[0];
-    $data['office_id']=$proj[1];
-    $data['region']=$proj[2];
-    $data['district']=$proj[3];
-    $data['location_name']=$proj[4];
-    $data['description']=$proj[5];
-    $data['cost']=$proj[6];
-    $data['fundsource_type']=$proj[7];
+    $data['contractor_id']=$proj[1];
+    $data['location_name']=$proj[2];
+    $data['description']=$proj[3];
+    $data['cost']=$proj[4];
+    $data['contractor_name']=$proj[5];
+    $data['actual_start']=$proj[6];
+    $data['actual_completion']=$proj[7];
 
-    $title['browserTitle']='Government Projects';
+    $title['browserTitle']='Government Constructs';
 
     $sessionData = $this->session->userdata('logged_in');
     if($sessionData)
@@ -178,7 +194,7 @@ class Projects extends CI_Controller
 
     if($authority==1){
       $this->load->view('includes/head',$title);
-      $this->load->view('admin/editProject',$data);
+      $this->load->view('admin/editConstruct',$data);
     }
     else{
       redirect('home','refresh');
@@ -197,63 +213,62 @@ class Projects extends CI_Controller
       $authority=0; 
 
     if($authority==1){
-      $title['browserTitle']='Government Projects';
-      $this->form_validation->set_rules('region','region', 'required');
-      $this->form_validation->set_rules('district','district', 'required');
-      $this->form_validation->set_rules('location_name','location', 'required');
+      $title['browserTitle']='Government Constructs';
+      $this->form_validation->set_rules('location_name','location name', 'required');
       $this->form_validation->set_rules('description','description', 'required');
       $this->form_validation->set_rules('cost','cost', 'numeric|required');
-      $this->form_validation->set_rules('fundsource_type','fundsource_type', 'required');
+      $this->form_validation->set_rules('contractor_name','contractor_name', 'required');
+      $this->form_validation->set_rules('actual_start','actual_start', 'required');
+      $this->form_validation->set_rules('actual_completion','actual_completion', 'required');
 
       if($this->form_validation->run() == FALSE)
       {
         $data = array(
         'project_id' => $this->input->post('project_id'),
-        'office_id' => $this->input->post('office_id'),
-        'office_id' => $this->input->post('office_id'),
-        'region' => $this->input->post('region'),
-        'district' => $this->input->post('district'),
+        'contractor_id' => $this->input->post('contractor_id'),
         'location_name' => $this->input->post('location_name'),
         'description' => $this->input->post('description'),
         'cost' => $this->input->post('cost'),
-        'fundsource_type' => $this->input->post('fundsource_type')
+        'contractor_name' => $this->input->post('contractor_name'),
+        'actual_start' => $this->input->post('actual_start'),
+        'actual_completion' => $this->input->post('actual_completion')
         );
 
         $this->load->view('includes/head',$title);
 
-        $this->load->view('admin/editProject',$data);
+        $this->load->view('admin/editConstruct',$data);
         $this->load->view('includes/foot');
       }
       else{
-        $ip=array(
+        $ip=array( //infra proj
         'project_id' => $this->input->post('project_id'),
         'location_name' => $this->input->post('location_name'),
         'description' => $this->input->post('description'),
         'cost' => $this->input->post('cost')
         );
         $op=array(
-          'office_id' => $this->input->post('office_id'),
-          'region' => $this->input->post('region'),
-          'district' => $this->input->post('district')
+          'contractor_id' => $this->input->post('contractor_id'),
+          'contractor_name' => $this->input->post('contractor_name')
         );
         $cr=array(
-          'office_id' => $this->input->post('office_id'),
+          'contractor_id' => $this->input->post('contractor_id'),
           'project_id' => $this->input->post('project_id'),
-          'fundsource_type' => $this->input->post('fundsource_type')
+          'actual_start' => $this->input->post('actual_start'),
+          'actual_completion' => $this->input->post('actual_completion')
         );
 
-        $this->ProjectModel->update_proj($ip,$op,$cr);
+        $this->ConstructModel->update_proj($ip,$op,$cr);
         $this->session->set_flashdata('editProjSuccess',1);
-        redirect('users/Projects');
+        redirect('users/Constructs');
       }
     }
     else
       redirect('home','refresh');
   }
 
-  function createProject()
+  function createConstruct()
   {
-   $title['browserTitle']='Government Projects';
+   $title['browserTitle']='Government Constructs';
    $sessionData = $this->session->userdata('logged_in');
     if($sessionData)
       $authority=$sessionData['authority'];
@@ -262,7 +277,7 @@ class Projects extends CI_Controller
 
     if($authority==1){
       $this->load->view('includes/head',$title);
-      $this->load->view('admin/createProject');
+      $this->load->view('admin/createConstruct');
     }
     else{
       redirect('home','refresh');
@@ -279,52 +294,52 @@ class Projects extends CI_Controller
       $authority=0; 
 
     if($authority==1){
-      $title['browserTitle']='Government Projects';
-      $this->form_validation->set_rules('region','region', 'required');
-      $this->form_validation->set_rules('district','district', 'required');
-      $this->form_validation->set_rules('location_name','location', 'required');
+      $title['browserTitle']='Government Constructs';
+      $this->form_validation->set_rules('location_name','location name', 'required');
       $this->form_validation->set_rules('description','description', 'required');
       $this->form_validation->set_rules('cost','cost', 'numeric|required');
-      $this->form_validation->set_rules('fundsource_type','fundsource_type', 'required');
+      $this->form_validation->set_rules('contractor_name','contractor_name', 'required');
+      $this->form_validation->set_rules('actual_start','actual_start', 'numeric|required');
+      $this->form_validation->set_rules('actual_completion','actual_completion', 'required');
 
       if($this->form_validation->run() == FALSE)
       {
         $this->load->view('includes/head',$title);
 
-        $this->load->view('admin/createProject');
+        $this->load->view('admin/createConstruct');
         $this->load->view('includes/foot');
       }
       else{
-        $ip=array(
+        $ip=array( //infra proj
         'location_name' => $this->input->post('location_name'),
         'description' => $this->input->post('description'),
         'cost' => $this->input->post('cost')
         );
-        $project_id=$this->ProjectModel->create_proj1($ip);
+        $project_id=$this->ConstructModel->create_proj1($ip);
 
-        $op=array(
-          'region' => $this->input->post('region'),
-          'district' => $this->input->post('district')
+        $op=array( //contractor
+          'contractor_name' => $this->input->post('contractor_name')
         );
-        $office_id=$this->ProjectModel->create_proj2($op);
+        $contractor_id=$this->ConstructModel->create_proj2($op);
 
 
         $cr=array(
-          'office_id' => $office_id,
+          'contractor_id' => $contractor_id,
           'project_id' => $project_id,
-          'fundsource_type' => $this->input->post('fundsource_type')
+          'actual_start' => $this->input->post('actual_start'),
+          'actual_completion' => $this->input->post('actual_completion')
         );
 
-        $this->ProjectModel->create_proj3($cr);
+        $this->ConstructModel->create_proj3($cr);
         $this->session->set_flashdata('createProjSuccess',1);
-        redirect('users/Projects');
+        redirect('users/Constructs');
       }  
     }
     else
       redirect('home','refresh');
   }
 
-  function deleteProject()
+  function deleteConstruct()
   {
     $sessionData = $this->session->userdata('logged_in');
     if($sessionData)
@@ -335,12 +350,12 @@ class Projects extends CI_Controller
     if($authority==1){
       $proj=$this->input->post('proj');
       $data['project_id']=$proj[0];
-      $data['office_id']=$proj[1];
+      $data['contractor_id']=$proj[1];
 
-      $this->ProjectModel->delete_proj($data);
+      $this->ConstructModel->delete_proj($data);
       $this->session->set_flashdata('deleteProjSuccess',1);
 
-      redirect('users/Projects'); 
+      redirect('users/Constructs'); 
     }
     else
       redirect('home','refresh');  

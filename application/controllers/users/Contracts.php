@@ -6,23 +6,41 @@ class Contracts extends CI_Controller
     parent::__construct();
     $this->load->library('pagination');
     $this->load->helper('url');
-    $this->load->model('ContractorModel','',TRUE);
+    $this->load->model('ContractModel','',TRUE);
   }
 
- function index()
- {
-    // $sessionData = $this->session->userdata('logged_in');
-    // $timezone=$sessionData['timezone'];
-    // if ($timezone==NULL)
-    $timezone="Asia/Singapore";
-    date_default_timezone_set($timezone);
+  function index()
+  {
+    $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; //means user can be anyone 
 
-    // $authority=$sessionData['authority'];
-    $authority=0; //means user can be anyone 
+    $data['authority']=$authority;
+
     $sort='';
     $limit_per_page = 10;
     $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 1;
     $orderBy=$this->input->get('sortBy');
+    $searchString=$this->input->get('search');
+
+    if($searchString) {
+      $search_count= $this->ContractModel->search_gov_proj_count($searchString);
+      $data['searchString']=$searchString;
+      if($search_count==0){
+        $data['searchExist']=0;
+        $data['searchResult']='No results for keyword: '.$searchString.'';
+      }
+      else {
+        $data['searchExist']=1;
+      }
+    }else{
+      $data['searchExist']=0;
+      $data['searchResult']='';
+    } 
+    
+    $data['searchString']=$searchString;
 
     if($orderBy=='contractor_name'){
       $sort='contractor_name';
@@ -40,7 +58,7 @@ class Contracts extends CI_Controller
       $sort='start_date';
       $order='desc';
     }
-    elseif ($orderBy=='contractor_name_ascending'){
+    else if($orderBy=='contractor_name_ascending'){
       $sort='contractor_name';
       $order='asc';
     }
@@ -61,16 +79,34 @@ class Contracts extends CI_Controller
       $order='asc';
       $orderBy='default';
     }
-    $data['prj_contractors']=$this->ContractorModel->get_contract($limit_per_page,($start_index-1)*10,$sort,$order);
-    $data['sort']=$orderBy;
-    // $total_records = $data['gov_proj']->num_rows();
-    // $data['total']=$total_records;
-    $config['base_url'] = base_url().'users/Contracts/index';
-    $config['first_url']= base_url().'users/Contracts/index?sortBy='.$orderBy.'';
-    $config['total_rows'] = $this->ContractorModel->get_contract_count();
-    $config['per_page'] = $limit_per_page;
 
-    $config['suffix'] = '?sortBy='.$orderBy.'';
+    //*************************************PAGINATION***********************************//
+    if($data['searchExist']){
+      $data['gov_proj']=$this->ContractModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);
+      $config['total_rows'] = $this->ContractModel->search_gov_proj_count($searchString);
+      $data['total_rows'] = $config['total_rows'];
+      $data['searchResult']=$data['total_rows'].' result/s for keyword: '.$searchString.'';
+      $data['sort']=$orderBy;
+      $config['base_url'] = base_url().'users/Contracts/index';
+      $config['first_url']= base_url().'users/Contracts/index?sortBy='.$orderBy.'&search='.$searchString.'';
+      $config['per_page'] = $limit_per_page;
+      $config['uri_segment'] = 4;
+      $config['suffix'] = '?sortBy='.$orderBy.'&search='.$searchString.'';
+    }
+    else{
+      $data['gov_proj']=$this->ContractModel->get_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order);
+      $config['total_rows'] = $this->ContractModel->get_gov_proj_count();
+      $data['total_rows'] = $config['total_rows'];
+
+      $data['sort']=$orderBy;
+      $config['base_url'] = base_url().'users/Contracts/index';
+      $config['first_url']= base_url().'users/Contracts/index?sortBy='.$orderBy.'';
+      $config['per_page'] = $limit_per_page;
+      $config['uri_segment'] = 4;
+      $config['suffix'] = '?sortBy='.$orderBy.'';
+    }
+
+
 
     $config['full_tag_open'] = '<ul class="pagination">';
     $config['full_tag_close'] = '</ul>';
@@ -97,7 +133,7 @@ class Contracts extends CI_Controller
     $config['num_tag_open'] = '<li class="waves-effect">';
     $config['num_tag_close'] = '</li>';
     
-    $config["uri_segment"] = 4;
+    
     $config['use_page_numbers'] = TRUE;
 
     $this->pagination->initialize($config);
@@ -105,19 +141,198 @@ class Contracts extends CI_Controller
     // build paging links
     $data["links"] = $this->pagination->create_links(); 
 
+    //*****************************END OF PAGINATION*********************************//
 
-    $title['browserTitle']='Cargo Deliveries';
+    $title['browserTitle']='Government Contracts';
     if($authority==1){
       $this->load->view('includes/head',$title);
-      $this->load->view('admin/adminHome',$data);
+      $this->load->view('users/Contracts',$data);
     }
     else{
       $this->load->view('includes/headUser',$title);
-      $this->load->view('users/contracts',$data);
+      $this->load->view('users/Contracts',$data);
     }
 
     $this->load->view('includes/foot');
   }
+
+  function editContract()
+  {
+    $proj=$this->input->post('proj');
+    $data['contractor_id']=$proj[0];
+    $data['office_id']=$proj[1];
+    $data['contractor_name']=$proj[2];
+    $data['region']=$proj[3];
+    $data['district']=$proj[4];
+    $data['start_date']=$proj[5];
+
+    $title['browserTitle']='Government Contracts';
+
+    $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; 
+
+    if($authority==1){
+      $this->load->view('includes/head',$title);
+      $this->load->view('admin/editContract',$data);
+    }
+    else{
+      redirect('home','refresh');
+    }
+
+
+    $this->load->view('includes/foot');   
+  }
+
+  function edit()
+  {
+    $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; 
+
+    if($authority==1){
+      $title['browserTitle']='Government Contracts';
+      $this->form_validation->set_rules('contractor_name','Contractor Name', 'required');
+      $this->form_validation->set_rules('region','region', 'required');
+      $this->form_validation->set_rules('district','district', 'required');
+      $this->form_validation->set_rules('start_date','start_date', 'required');
+
+      if($this->form_validation->run() == FALSE)
+      {
+        $data = array(
+        'contractor_id' => $this->input->post('contractor_id'),
+        'office_id' => $this->input->post('office_id'),
+        'contractor_name' => $this->input->post('contractor_name'),
+        'region' => $this->input->post('region'),
+        'district' => $this->input->post('district'),
+        'start_date' => $this->input->post('start_date')
+        );
+
+        $this->load->view('includes/head',$title);
+
+        $this->load->view('admin/editContract',$data);
+        $this->load->view('includes/foot');
+      }
+      else{
+        $ip=array( //contractor
+        'contractor_id' => $this->input->post('contractor_id'),
+        'contractor_name' => $this->input->post('contractor_name')
+        );
+        $op=array( //infra office
+          'office_id' => $this->input->post('office_id'),
+          'region' => $this->input->post('region'),
+          'district' => $this->input->post('district')
+        );
+        $cr=array( //contracts
+          'office_id' => $this->input->post('office_id'),
+          'contractor_id' => $this->input->post('contractor_id'),
+          'start_date' => $this->input->post('start_date')
+        );
+
+        $this->ContractModel->update_proj($ip,$op,$cr);
+        $this->session->set_flashdata('editProjSuccess',1);
+        redirect('users/Contracts');
+      }
+    }
+    else
+      redirect('home','refresh');
+  }
+
+  function createContract()
+  {
+   $title['browserTitle']='Government Contracts';
+   $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; 
+
+    if($authority==1){
+      $this->load->view('includes/head',$title);
+      $this->load->view('admin/createContract');
+    }
+    else{
+      redirect('home','refresh');
+    }
+    $this->load->view('includes/foot');     
+  }
+
+  function create()
+  {
+    $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; 
+
+    if($authority==1){
+      $title['browserTitle']='Government Contracts';
+      $this->form_validation->set_rules('contractor_name','Contractor Name', 'required');
+      $this->form_validation->set_rules('region','region', 'required');
+      $this->form_validation->set_rules('district','district', 'required');
+      $this->form_validation->set_rules('start_date','start_date', 'required');
+
+      if($this->form_validation->run() == FALSE)
+      {
+        $this->load->view('includes/head',$title);
+
+        $this->load->view('admin/createContract');
+        $this->load->view('includes/foot');
+      }
+      else{
+        $ip=array( //contractor
+        'contractor_name' => $this->input->post('contractor_name')
+        );
+        $contractor_id=$this->ContractModel->create_proj1($ip);
+
+        $op=array(
+          'region' => $this->input->post('region'),
+          'district' => $this->input->post('district')
+        );
+        $office_id=$this->ContractModel->create_proj2($op);
+
+
+        $cr=array(
+          'office_id' => $office_id,
+          'contractor_id' => $contractor_id,
+          'start_date' => $this->input->post('start_date')
+        );
+
+        $this->ContractModel->create_proj3($cr);
+        $this->session->set_flashdata('createProjSuccess',1);
+        redirect('users/Contracts');
+      }  
+    }
+    else
+      redirect('home','refresh');
+  }
+
+  function deleteContract()
+  {
+    $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; 
+
+    if($authority==1){
+      $proj=$this->input->post('proj');
+      $data['contractor_id']=$proj[0];
+      $data['office_id']=$proj[1];
+
+      $this->ContractModel->delete_proj($data);
+      $this->session->set_flashdata('deleteProjSuccess',1);
+
+      redirect('users/Contracts'); 
+    }
+    else
+      redirect('home','refresh');  
+  }
 }
+
 
 ?>
