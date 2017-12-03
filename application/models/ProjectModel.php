@@ -74,4 +74,51 @@ class ProjectModel extends CI_Model
 
 	}
 
+	function create_proj1($ip)
+	{
+		
+		$this->db->insert('InfrastructureProject',$ip);
+
+		$this->db->select_max('project_id');
+		$query = $this->db->get('InfrastructureProject');
+		foreach ($query->result_array() as $row) {
+			$ans=$row['project_id'];
+		}
+		return $ans;
+
+	}
+
+	function create_proj2($op)
+	{
+
+		$this->db->insert('InfrastructureOffice',$op);
+
+		$this->db->select_max('office_id');
+		$query = $this->db->get('InfrastructureOffice');
+		foreach ($query->result_array() as $row) {
+			$ans=$row['office_id'];
+		}
+		return $ans;
+	}
+
+	function create_proj3($cr)
+	{
+		$this->db->insert('creates',$cr);
+	}
+
+	function delete_proj($data)
+	{
+		
+		$this->db->where('project_id',$data['project_id']);
+		$this->db->delete('InfrastructureProject');
+
+		$this->db->where('office_id',$data['office_id']);
+		$this->db->delete('InfrastructureOffice');
+
+		$this->db->where('project_id',$data['project_id']);
+		$this->db->where('office_id',$data['office_id']);
+		$this->db->delete('creates');
+
+	}
+
 }

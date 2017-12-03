@@ -58,6 +58,10 @@ table.highlight > tbody > tr:hover {
 	color: orange;
 }
 
+.material-icons:hover {
+  color: #f9a825;
+} 
+
 #iconButton, #iconButton a{
 
   background-color: transparent;

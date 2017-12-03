@@ -170,91 +170,181 @@ class Projects extends CI_Controller
     $data['fundsource_type']=$proj[7];
 
     $title['browserTitle']='Government Projects';
-    $this->load->view('includes/head',$title);
-    $this->load->view('admin/editProject',$data);
-    
+
+    $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; 
+
+    if($authority==1){
+      $this->load->view('includes/head',$title);
+      $this->load->view('admin/editProject',$data);
+    }
+    else{
+      redirect('home','refresh');
+    }
+
 
     $this->load->view('includes/foot');   
   }
 
   function edit()
   {
-    $title['browserTitle']='Government Projects';
-    $this->form_validation->set_rules('region','region', 'required');
-    $this->form_validation->set_rules('district','district', 'required');
-    $this->form_validation->set_rules('location_name','location', 'required');
-    $this->form_validation->set_rules('description','description', 'required');
-    $this->form_validation->set_rules('cost','cost', 'required');
-    $this->form_validation->set_rules('fundsource_type','fundsource_type', 'required');
+    $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; 
 
-    if($this->form_validation->run() == FALSE)
-    {
-      $data = array(
-      'project_id' => $this->input->post('project_id'),
-      'office_id' => $this->input->post('office_id'),
-      'office_id' => $this->input->post('office_id'),
-      'region' => $this->input->post('region'),
-      'district' => $this->input->post('district'),
-      'location_name' => $this->input->post('location_name'),
-      'description' => $this->input->post('description'),
-      'cost' => $this->input->post('cost'),
-      'fundsource_type' => $this->input->post('fundsource_type')
-      );
+    if($authority==1){
+      $title['browserTitle']='Government Projects';
+      $this->form_validation->set_rules('region','region', 'required');
+      $this->form_validation->set_rules('district','district', 'required');
+      $this->form_validation->set_rules('location_name','location', 'required');
+      $this->form_validation->set_rules('description','description', 'required');
+      $this->form_validation->set_rules('cost','cost', 'required');
+      $this->form_validation->set_rules('fundsource_type','fundsource_type', 'required');
 
-      $this->load->view('includes/head',$title);
-
-      $this->load->view('admin/editProject',$data);
-      $this->load->view('includes/foot');
-    }
-    else{
-      echo $this->input->post('project_id');
-      $ip=array(
-      'project_id' => $this->input->post('project_id'),
-      'location_name' => $this->input->post('location_name'),
-      'description' => $this->input->post('description'),
-      'cost' => $this->input->post('cost')
-      );
-      $op=array(
+      if($this->form_validation->run() == FALSE)
+      {
+        $data = array(
+        'project_id' => $this->input->post('project_id'),
+        'office_id' => $this->input->post('office_id'),
         'office_id' => $this->input->post('office_id'),
         'region' => $this->input->post('region'),
-        'district' => $this->input->post('district')
-      );
-      $cr=array(
-        'office_id' => $this->input->post('office_id'),
-        'project_id' => $this->input->post('project_id'),
+        'district' => $this->input->post('district'),
+        'location_name' => $this->input->post('location_name'),
+        'description' => $this->input->post('description'),
+        'cost' => $this->input->post('cost'),
         'fundsource_type' => $this->input->post('fundsource_type')
-      );
+        );
 
-      // $data = array(
-      // 'project_id' => $this->input->post('project_id'),
-      // 'office_id' => $this->input->post('office_id'),
-      // 'office_id' => $this->input->post('office_id'),
-      // 'region' => $this->input->post('region'),
-      // 'district' => $this->input->post('district'),
-      // 'location_name' => $this->input->post('location_name'),
-      // 'description' => $this->input->post('description'),
-      // 'cost' => $this->input->post('cost'),
-      // 'fundsource_type' => $this->input->post('fundsource_type')
-      // );
+        $this->load->view('includes/head',$title);
 
-      $this->ProjectModel->update_proj($ip,$op,$cr);
-      $this->session->set_flashdata('editProjSuccess',1);
-      redirect('users/Projects');
+        $this->load->view('admin/editProject',$data);
+        $this->load->view('includes/foot');
+      }
+      else{
+        $ip=array(
+        'project_id' => $this->input->post('project_id'),
+        'location_name' => $this->input->post('location_name'),
+        'description' => $this->input->post('description'),
+        'cost' => $this->input->post('cost')
+        );
+        $op=array(
+          'office_id' => $this->input->post('office_id'),
+          'region' => $this->input->post('region'),
+          'district' => $this->input->post('district')
+        );
+        $cr=array(
+          'office_id' => $this->input->post('office_id'),
+          'project_id' => $this->input->post('project_id'),
+          'fundsource_type' => $this->input->post('fundsource_type')
+        );
+
+        $this->ProjectModel->update_proj($ip,$op,$cr);
+        $this->session->set_flashdata('editProjSuccess',1);
+        redirect('users/Projects');
+      }
     }
+    else
+      redirect('home','refresh');
+  }
+
+  function createProject()
+  {
+   $title['browserTitle']='Government Projects';
+   $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; 
+
+    if($authority==1){
+      $this->load->view('includes/head',$title);
+      $this->load->view('admin/createProject',$data);
+    }
+    else{
+      redirect('home','refresh');
+    }
+    $this->load->view('includes/foot');     
+  }
+
+  function create()
+  {
+    $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; 
+
+    if($authority==1){
+      $title['browserTitle']='Government Projects';
+      $this->form_validation->set_rules('region','region', 'required');
+      $this->form_validation->set_rules('district','district', 'required');
+      $this->form_validation->set_rules('location_name','location', 'required');
+      $this->form_validation->set_rules('description','description', 'required');
+      $this->form_validation->set_rules('cost','cost', 'required');
+      $this->form_validation->set_rules('fundsource_type','fundsource_type', 'required');
+
+      if($this->form_validation->run() == FALSE)
+      {
+        $this->load->view('includes/head',$title);
+
+        $this->load->view('admin/createProject');
+        $this->load->view('includes/foot');
+      }
+      else{
+        $ip=array(
+        'location_name' => $this->input->post('location_name'),
+        'description' => $this->input->post('description'),
+        'cost' => $this->input->post('cost')
+        );
+        $project_id=$this->ProjectModel->create_proj1($ip);
+
+        $op=array(
+          'region' => $this->input->post('region'),
+          'district' => $this->input->post('district')
+        );
+        $office_id=$this->ProjectModel->create_proj2($op);
+
+
+        $cr=array(
+          'office_id' => $office_id,
+          'project_id' => $project_id,
+          'fundsource_type' => $this->input->post('fundsource_type')
+        );
+
+        $this->ProjectModel->create_proj3($cr);
+        $this->session->set_flashdata('createProjSuccess',1);
+        redirect('users/Projects');
+      }  
+    }
+    else
+      redirect('home','refresh');
   }
 
   function deleteProject()
   {
-    $proj=$this->input->post('proj');
-    $data['pid']=$proj[0];
-    $data['oid']=$proj[1];
+    $sessionData = $this->session->userdata('logged_in');
+    if($sessionData)
+      $authority=$sessionData['authority'];
+    else
+      $authority=0; 
 
-    $title['browserTitle']='Government Projects';
-    $this->load->view('includes/head',$title);
-    $this->load->view('home',$data);
-    
+    if($authority==1){
+      $proj=$this->input->post('proj');
+      $data['project_id']=$proj[0];
+      $data['office_id']=$proj[1];
 
-    $this->load->view('includes/foot');   
+      $this->ProjectModel->delete_proj($data);
+      $this->session->set_flashdata('deleteProjSuccess',1);
+
+      redirect('users/Projects'); 
+    }
+    else
+      redirect('home','refresh');  
   }
 }
 

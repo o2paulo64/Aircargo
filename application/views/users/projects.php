@@ -11,6 +11,8 @@
 			<div class='col m4'>
 				<?php
 					if($this->session->flashdata('editProjSuccess')==1) echo('<div class="green white-text"><center><strong>Project successfully Updated</strong></center></div>');
+					else if($this->session->flashdata('deleteProjSuccess')==1) echo('<div class="green white-text"><center><strong>Project successfully Deleted</strong></center></div>');
+					else if($this->session->flashdata('createProjSuccess')==1) echo('<div class="green white-text"><center><strong>Project successfully created</strong></center></div>');
 				?>
 			</div>
 		</div>
@@ -60,6 +62,23 @@
 		              <th>Description</th>
 		              <th>Cost</th>
 		              <th>Funding</th>
+		              <th></th>
+		              <?php 
+		              	if($authority==1){
+		              		echo"
+						<td>
+							<form onsubmit='return confirm(\"Are you sure you want to create new project? \")' role='form' action ='";
+				
+				echo base_url('users/Projects/createProject');
+				echo "' method='POST'>
+							<center>
+							<button type='submit' id='iconButton'><i class='material-icons' title='Create new project'>fiber_new</i></button></center>
+							</form>
+						</td>
+		              		";
+		              	}
+		              ?>
+
 		          </tr>
 		        </thead>
 
