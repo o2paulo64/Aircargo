@@ -34,6 +34,7 @@
 			<div class="col m3"  id='sortby'>
 				<select class='input-field' onchange="javascript:handleSelect(this,'users/Cargoes?search=<?php echo $searchString; ?>&sortBy=')">
 					<option value="" disabled selected>Sort by...</option>
+					<option value="default">Default</option>
 					<optgroup label="Ascending Order">
 						<option value='type_of_objects_ascending'>Type of Object</option'>
 						<option value='no_objects_ascending'>Number of Objects</option'>

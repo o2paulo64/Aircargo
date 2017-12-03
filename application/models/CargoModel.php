@@ -30,7 +30,7 @@ class CargoModel extends CI_Model
 	{
 		$this->db->select('*');
 		$this -> db -> from('v_cargo_delivery');
-		$this->db->or_like('type_of_objects',$str, 'both');
+		$this->db->like('type_of_objects',$str, 'both');
 		$this->db->or_like('no_objects',$str, 'both');
 		$this->db->or_like('overall_cost',$str, 'both');
 		$this->db->or_like('type',$str, 'both');
@@ -49,8 +49,7 @@ class CargoModel extends CI_Model
 	{
 		$this->db->select('*');
 		$this -> db -> from('v_cargo_delivery');
-		$this -> db -> from('v_cargo_delivery');
-		$this->db->or_like('type_of_objects',$str, 'both');
+		$this->db->like('type_of_objects',$str, 'both');
 		$this->db->or_like('no_objects',$str, 'both');
 		$this->db->or_like('overall_cost',$str, 'both');
 		$this->db->or_like('type',$str, 'both');

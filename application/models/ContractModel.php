@@ -31,11 +31,47 @@ class ContractModel extends CI_Model
 		$this->db->select('*');
 		$this -> db -> from('v_project_contractor');
 		$this->db->like('contractor_name',$str, 'both');
-		$this->db->like('region',$str, 'both');
+		$this->db->or_like('region',$str, 'both');
 		$this->db->or_like('district',$str, 'both');
 		$this->db->or_like('start_date',$str, 'both');
 		$query = $this->db->get();
 		return $query->num_rows();
+	}
+
+	function advance_search_count($str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('v_project_contractor');
+		if($str['contractor_name'])
+			$this->db->like('contractor_name',$str['contractor_name'], 'both');
+		if($str['region'])
+			$this->db->like('region',$str['region'], 'both');
+		if($str['district'])
+			$this->db->like('district',$str['district'], 'both');
+		if($str['start_date'])
+			$this->db->like('start_date',$str['start_date'], 'both');
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+
+	function advance_search($limit,$start,$sort,$order,$str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('v_project_contractor');
+		if($str['contractor_name'])
+			$this->db->like('contractor_name',$str['contractor_name'], 'both');
+		if($str['region'])
+			$this->db->like('region',$str['region'], 'both');
+		if($str['district'])
+			$this->db->like('district',$str['district'], 'both');
+		if($str['start_date'])
+			$this->db->like('start_date',$str['start_date'], 'both');
+		
+		if($sort!='default')
+			$this->db->order_by($sort,$order);
+		$this->db->limit($limit,$start);
+		$query = $this->db->get();
+		return $query;
 	}
 
 	function search_gov_proj($limit,$start,$sort,$order,$str)
@@ -43,7 +79,7 @@ class ContractModel extends CI_Model
 		$this->db->select('*');
 		$this -> db -> from('v_project_contractor');
 		$this->db->like('contractor_name',$str, 'both');
-		$this->db->like('region',$str, 'both');
+		$this->db->or_like('region',$str, 'both');
 		$this->db->or_like('district',$str, 'both');
 		$this->db->or_like('start_date',$str, 'both');
 

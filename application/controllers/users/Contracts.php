@@ -25,7 +25,25 @@ class Contracts extends CI_Controller
     $orderBy=$this->input->get('sortBy');
     $searchString=$this->input->get('search');
 
-    if($searchString) {
+    $search['contractor_name']=$this->input->post('contractor_name');
+    $search['region']=$this->input->post('region');
+    $search['district']=$this->input->post('district');
+    $search['start_date']=$this->input->post('start_date');
+
+    $data['advanceSearchExist']=0;
+    $data['searchExist']=0;
+
+    if($search['contractor_name'] or $search['region'] or $search['district'] or $search['start_date']) {
+      $search_count= $this->ContractModel->advance_search_count($search);
+      if($search_count==0){
+        $data['advanceSearchExist']=0;
+        $data['advanceSearchResult']='No results';
+      }
+      else {
+        $data['advanceSearchExist']=1;
+      }
+    }
+    else if($searchString) {
       $search_count= $this->ContractModel->search_gov_proj_count($searchString);
       $data['searchString']=$searchString;
       if($search_count==0){
@@ -81,7 +99,11 @@ class Contracts extends CI_Controller
     }
 
     //*************************************PAGINATION***********************************//
-    if($data['searchExist']){
+    if($data['advanceSearchExist']){
+      $data['gov_proj']=$this->ContractModel->advance_search($limit_per_page,($start_index-1)*10,$sort,$order,$search);
+      $data['searchResult']=$this->ContractModel->advance_search_count($searchString).'result/s.';
+    }
+    else if($data['searchExist']){
       $data['gov_proj']=$this->ContractModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);
       $config['total_rows'] = $this->ContractModel->search_gov_proj_count($searchString);
       $data['total_rows'] = $config['total_rows'];
