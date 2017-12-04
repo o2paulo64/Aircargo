@@ -32,7 +32,13 @@
 			    
 			</div>
 			<div class="col m3"  id='sortby'>
-				<select class='input-field' onchange="javascript:handleSelect(this,'users/Contracts?search=<?php echo $searchString; ?>&sortBy=')">
+				<?php 
+					if($advanceSearchExist)
+						$string='users/Contracts/index?asearch%5B%5D='.$search['contractor_name'].'&asearch%5B%5D='.$search['region'].'&asearch%5B%5D='.$search['district'].'&asearch%5B%5D='.$search['start_date'].'';
+					else
+						$string='users/Contracts?search='.$searchString.'';
+				?>
+				<select class='input-field' onchange="javascript:handleSelect(this,'<?php echo $string;?>&sortBy=')">
 					<option value="" disabled selected>Sort by...</option>
 					<option value="default">Default</option>
 					<optgroup label="Ascending Order">
@@ -58,22 +64,22 @@
 					<div class='section'></div>
 					<div class='row'></div>
 					<div class='row'>
-							<form id='search-bar-css' action=<?php echo base_url('users/Contracts'); ?> method="POST">
+							<form id='search-bar-css' action=<?php echo base_url('users/Contracts?'); ?> method="GET">
 							    <div clas='section'>
 							        <div class="input-field col s12">
-							          <input name="contractor_name" type="text" class="validate">
+							          <input name="asearch[]" type="text" class="validate">
 							          <label for="contractor_name">Search Constructor Name</label>
 							        </div>
 							        <div class="input-field col s12">
-							          <input name="region" type="text" class="validate">
+							          <input name="asearch[]" type="text" class="validate">
 							          <label for="region">Search Region</label>
 							        </div>
 							        <div class="input-field col s12">
-							          <input name="district" type="text" class="validate">
+							          <input name="asearch[]" type="text" class="validate">
 							          <label for="district">Search District</label>
 							        </div>
 							        <div class="input-field col s12">
-							          <input name="start_date" type="text" class="validate">
+							          <input name="asearch[]" type="text" class="validate">
 							          <label for="start_date">Search Start Date</label>
 							        </div>
 							    </div>

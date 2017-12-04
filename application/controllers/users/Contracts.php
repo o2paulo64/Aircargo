@@ -25,10 +25,13 @@ class Contracts extends CI_Controller
     $orderBy=$this->input->get('sortBy');
     $searchString=$this->input->get('search');
 
-    $search['contractor_name']=$this->input->post('contractor_name');
-    $search['region']=$this->input->post('region');
-    $search['district']=$this->input->post('district');
-    $search['start_date']=$this->input->post('start_date');
+    $getAdvanceSearch=$this->input->get('asearch');
+    $search=array(
+      'contractor_name' => $getAdvanceSearch[0],
+      'region' => $getAdvanceSearch[1],
+      'district' => $getAdvanceSearch[2],
+      'start_date' => $getAdvanceSearch[3]
+    );
 
     $data['advanceSearchExist']=0;
     $data['searchExist']=0;
@@ -101,16 +104,17 @@ class Contracts extends CI_Controller
 
     //*************************************PAGINATION***********************************//
     if($data['advanceSearchExist']){
-      $data['gov_proj']=$this->ContractModel->advance_search($sort,$order,$search);
+      $data['gov_proj']=$this->ContractModel->advance_search($limit_per_page,($start_index-1)*10,$sort,$order,$search);
       $data['searchResult']=$this->ContractModel->advance_search_count($search).' result/s.';
       $config['total_rows'] = $this->ContractModel->advance_search_count($search);
       $data['total_rows'] = $config['total_rows'];
       $data['sort']=$orderBy;
       $config['base_url'] = base_url().'users/Contracts/index';
-      $config['first_url']= base_url().'users/Contracts/index?sortBy='.$orderBy.'&aSearch='.$search;
-      $config['per_page'] = 10000;
+      $config['first_url']= base_url().'users/Contracts/index?sortBy='.$orderBy.'&asearch%5B%5D='.$search['contractor_name'].'&asearch%5B%5D='.$search['region'].'&asearch%5B%5D='.$search['district'].'&asearch%5B%5D='.$search['start_date'].'';
+      $data['search']=$search;
+      $config['per_page'] = $limit_per_page;
       $config['uri_segment'] = 4;
-      $config['suffix'] = '?sortBy='.$orderBy.'&aSearch='.$search.'$res='.$data.'';
+      $config['suffix'] = '?sortBy='.$orderBy.'&asearch%5B%5D='.$search['contractor_name'].'&asearch%5B%5D='.$search['region'].'&asearch%5B%5D='.$search['district'].'&asearch%5B%5D='.$search['start_date'].'';
     }
     else if($data['searchExist']){
       $data['gov_proj']=$this->ContractModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);

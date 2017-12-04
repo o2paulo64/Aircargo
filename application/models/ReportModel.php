@@ -39,6 +39,46 @@ class ReportModel extends CI_Model
 		return $query->num_rows();
 	}
 
+	function advance_search_count($str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('v_ai_report');
+		if($str['operation_name'])
+			$this->db->like('operation_name',$str['operation_name'], 'both');
+		if($str['airport_name'])
+			$this->db->like('airport_name',$str['airport_name'], 'both');
+		if($str['type'])
+			$this->db->like('type',$str['type'], 'both');
+		if($str['classification'])
+			$this->db->like('classification',$str['classification'], 'both');
+		if($str['description'])
+			$this->db->like('description',$str['description'], 'both');
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+
+	function advance_search($limit,$start,$sort,$order,$str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('v_ai_report');
+		if($str['operation_name'])
+			$this->db->like('operation_name',$str['operation_name'], 'both');
+		if($str['airport_name'])
+			$this->db->like('airport_name',$str['airport_name'], 'both');
+		if($str['type'])
+			$this->db->like('type',$str['type'], 'both');
+		if($str['classification'])
+			$this->db->like('classification',$str['classification'], 'both');
+		if($str['description'])
+			$this->db->like('description',$str['description'], 'both');
+		
+		if($sort!='default')
+			$this->db->order_by($sort,$order);
+		$this->db->limit($limit,$start);
+		$query = $this->db->get();
+		return $query;
+	}
+
 	function search_gov_proj($limit,$start,$sort,$order,$str)
 	{
 		$this->db->select('*');

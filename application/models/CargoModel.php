@@ -45,6 +45,70 @@ class CargoModel extends CI_Model
 		return $query->num_rows();
 	}
 
+	function advance_search_count($str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('v_cargo_delivery');
+		if($str['type_of_objects'])
+			$this->db->like('type_of_objects',$str['type_of_objects'], 'both');
+		if($str['no_objects'])
+			$this->db->like('no_objects',$str['no_objects'], 'both');
+		if($str['overall_cost'])
+			$this->db->like('overall_cost',$str['overall_cost'], 'both');
+		if($str['type'])
+			$this->db->like('type',$str['type'], 'both');
+		if($str['operation_name'])
+			$this->db->like('operation_name',$str['operation_name'], 'both');
+		if($str['airport_name'])
+			$this->db->like('airport_name',$str['airport_name'], 'both');
+		if($str['rnum'])
+			$this->db->like('rnum',$str['rnum'], 'both');
+		if($str['location_name'])
+			$this->db->like('location_name',$str['location_name'], 'both');
+		if($str['description'])
+			$this->db->like('description',$str['description'], 'both');
+		if($str['cost'])
+			$this->db->like('cost',$str['cost'], 'both');
+		if($str['shipping_date'])
+			$this->db->like('shipping_date',$str['shipping_date'], 'both');
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+
+	function advance_search($limit,$start,$sort,$order,$str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('v_cargo_delivery');
+		if($str['type_of_objects'])
+			$this->db->like('type_of_objects',$str['type_of_objects'], 'both');
+		if($str['no_objects'])
+			$this->db->like('no_objects',$str['no_objects'], 'both');
+		if($str['overall_cost'])
+			$this->db->like('overall_cost',$str['overall_cost'], 'both');
+		if($str['type'])
+			$this->db->like('type',$str['type'], 'both');
+		if($str['operation_name'])
+			$this->db->like('operation_name',$str['operation_name'], 'both');
+		if($str['airport_name'])
+			$this->db->like('airport_name',$str['airport_name'], 'both');
+		if($str['rnum'])
+			$this->db->like('rnum',$str['rnum'], 'both');
+		if($str['location_name'])
+			$this->db->like('location_name',$str['location_name'], 'both');
+		if($str['description'])
+			$this->db->like('description',$str['description'], 'both');
+		if($str['cost'])
+			$this->db->like('cost',$str['cost'], 'both');
+		if($str['shipping_date'])
+			$this->db->like('shipping_date',$str['shipping_date'], 'both');
+		
+		if($sort!='default')
+			$this->db->order_by($sort,$order);
+		$this->db->limit($limit,$start);
+		$query = $this->db->get();
+		return $query;
+	}
+
 	function search_gov_proj($limit,$start,$sort,$order,$str)
 	{
 		$this->db->select('*');

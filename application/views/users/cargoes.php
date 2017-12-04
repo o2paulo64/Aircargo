@@ -32,7 +32,13 @@
 			    
 			</div>
 			<div class="col m3"  id='sortby'>
-				<select class='input-field' onchange="javascript:handleSelect(this,'users/Cargoes?search=<?php echo $searchString; ?>&sortBy=')">
+				<?php 
+					if($advanceSearchExist)
+						$string='users/Cargoes/index?asearch%5B%5D='.$search['type_of_objects'].'&asearch%5B%5D='.$search['no_objects'].'&asearch%5B%5D='.$search['overall_cost'].'&asearch%5B%5D='.$search['type'].'&asearch%5B%5D='.$search['operation_name'].'&asearch%5B%5D='.$search['airport_name'].'&asearch%5B%5D='.$search['rnum'].'&asearch%5B%5D='.$search['location_name'].'&asearch%5B%5D='.$search['description'].'&asearch%5B%5D='.$search['cost'].'&asearch%5B%5D='.$search['shipping_date'].'';
+					else
+						$string='users/Cargoes?search='.$searchString.'';
+				?>
+				<select class='input-field' onchange="javascript:handleSelect(this,'<?php echo $string;?>&sortBy=')">
 					<option value="" disabled selected>Sort by...</option>
 					<option value="default">Default</option>
 					<optgroup label="Ascending Order">
@@ -65,7 +71,72 @@
 			</div>
 
 		</div>
+		<div id="modal1" class="modal">
+			<div class="modal-content">
+				<h5>Advance Search</h5>
+				<div class='container'>
+					<div class='section'></div>
+					<div class='row'></div>
+					<div class='row'>
+							<form id='search-bar-css' action=<?php echo base_url('users/Cargoes?'); ?> method="GET">
+							    <div clas='section'>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="type_of_objects">Type of Object</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="Numberofone">Number of Objects</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="overall_cost">Overall Cost</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="start_date">Aircraft</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="operation_name">Operation Name</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="airport_name">Airport Name</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="region">Region</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="location_name">Location</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="description">Description</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="b">Cost</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="av">Shipping Date</label>
+							        </div>
+							    </div>
+						        <div class='section'>
+									<div class='col m4'>
+										<button type='submit' class='waves-effect waves-light btn'>Search</button>	
+									</div>
+								</div>
+						    </form>   
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class='container' id='table-container'>
+			<a class='modal-trigger' style='font-size: 11px; padding-bottom: 20px;' href="#modal1"> Advance Search</a><br>
 			<label style='float: left;'><?php echo $searchResult;?></label>
 			<label style='float: right;'>Sorted by <?php echo $sort;?></label>
 			<table class='responsive-table bordered highlight centered blue-grey darken-1 white-text'>

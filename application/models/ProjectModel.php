@@ -40,6 +40,50 @@ class ProjectModel extends CI_Model
 		return $query->num_rows();
 	}
 
+	function advance_search_count($str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('v_gov_projects');
+		if($str['region'])
+			$this->db->like('region',$str['region'], 'both');
+		if($str['district'])
+			$this->db->like('district',$str['district'], 'both');
+		if($str['location_name'])
+			$this->db->like('location_name',$str['location_name'], 'both');
+		if($str['description'])
+			$this->db->like('description',$str['description'], 'both');
+		if($str['cost'])
+			$this->db->like('cost',$str['cost'], 'both');
+		if($str['fundsource_type'])
+			$this->db->like('fundsource_type',$str['fundsource_type'], 'both');
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+
+	function advance_search($limit,$start,$sort,$order,$str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('v_gov_projects');
+		if($str['region'])
+			$this->db->like('region',$str['region'], 'both');
+		if($str['district'])
+			$this->db->like('district',$str['district'], 'both');
+		if($str['location_name'])
+			$this->db->like('location_name',$str['location_name'], 'both');
+		if($str['description'])
+			$this->db->like('description',$str['description'], 'both');
+		if($str['cost'])
+			$this->db->like('cost',$str['cost'], 'both');
+		if($str['fundsource_type'])
+			$this->db->like('fundsource_type',$str['fundsource_type'], 'both');
+		
+		if($sort!='default')
+			$this->db->order_by($sort,$order);
+		$this->db->limit($limit,$start);
+		$query = $this->db->get();
+		return $query;
+	}
+
 	function search_gov_proj($limit,$start,$sort,$order,$str)
 	{
 		$this->db->select('*');

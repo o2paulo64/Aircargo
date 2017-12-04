@@ -25,7 +25,31 @@ class Projects extends CI_Controller
     $orderBy=$this->input->get('sortBy');
     $searchString=$this->input->get('search');
 
-    if($searchString) {
+    $getAdvanceSearch=$this->input->get('asearch');
+    $search=array(
+      'region' => $getAdvanceSearch[0],
+      'district' => $getAdvanceSearch[1],
+      'location_name' => $getAdvanceSearch[2],
+      'description' => $getAdvanceSearch[3],
+      'cost' => $getAdvanceSearch[4],
+      'fundsource_type' => $getAdvanceSearch[5]
+    );
+
+    $data['advanceSearchExist']=0;
+    $data['searchExist']=0;
+    $data['searchResult']='';
+
+    if($search['region'] or $search['district'] or $search['location_name'] or $search['description'] or $search['cost'] or $search['fundsource_type']) {
+      $search_count= $this->ProjectModel->advance_search_count($search);
+      if($search_count==0){
+        $data['advanceSearchExist']=0;
+        $data['searchResult']='No results';
+      }
+      else {
+        $data['advanceSearchExist']=1;
+      }
+    }
+    else if($searchString) {
       $search_count= $this->ProjectModel->search_gov_proj_count($searchString);
       $data['searchString']=$searchString;
       if($search_count==0){
@@ -54,9 +78,25 @@ class Projects extends CI_Controller
       $sort='location_name';
       $order='desc';
     }
+    elseif ($orderBy=='description'){
+      $sort='description';
+      $order='desc';
+    }
     elseif ($orderBy=='cost'){
       $sort='cost';
       $order='desc';
+    }
+    elseif ($orderBy=='fundsource_type'){
+      $sort='fundsource_type';
+      $order='desc';
+    }
+    elseif ($orderBy=='description_ascending'){
+      $sort='description';
+      $order='asc';
+    }
+    elseif ($orderBy=='fundsource_type_ascending'){
+      $sort='fundsource_type';
+      $order='asc';
     }
     elseif ($orderBy=='district_ascending'){
       $sort='district';
@@ -81,7 +121,20 @@ class Projects extends CI_Controller
     }
 
     //*************************************PAGINATION***********************************//
-    if($data['searchExist']){
+    if($data['advanceSearchExist']){
+      $data['gov_proj']=$this->ProjectModel->advance_search($limit_per_page,($start_index-1)*10,$sort,$order,$search);
+      $data['searchResult']=$this->ProjectModel->advance_search_count($search).' result/s.';
+      $config['total_rows'] = $this->ProjectModel->advance_search_count($search);
+      $data['total_rows'] = $config['total_rows'];
+      $data['sort']=$orderBy;
+      $config['base_url'] = base_url().'users/Projects/index';
+      $config['first_url']= base_url().'users/Projects/index?sortBy='.$orderBy.'&asearch%5B%5D='.$search['region'].'&asearch%5B%5D='.$search['district'].'&asearch%5B%5D='.$search['location_name'].'&asearch%5B%5D='.$search['description'].'&asearch%5B%5D='.$search['cost'].'&asearch%5B%5D='.$search['fundsource_type'].'';
+      $data['search']=$search;
+      $config['per_page'] = $limit_per_page;
+      $config['uri_segment'] = 4;
+      $config['suffix'] = '?sortBy='.$orderBy.'&asearch%5B%5D='.$search['region'].'&asearch%5B%5D='.$search['district'].'&asearch%5B%5D='.$search['location_name'].'&asearch%5B%5D='.$search['description'].'&asearch%5B%5D='.$search['cost'].'&asearch%5B%5D='.$search['fundsource_type'].'';
+    }
+    else if($data['searchExist']){
       $data['gov_proj']=$this->ProjectModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);
       $config['total_rows'] = $this->ProjectModel->search_gov_proj_count($searchString);
       $data['total_rows'] = $config['total_rows'];

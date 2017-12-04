@@ -25,7 +25,36 @@ class Cargoes extends CI_Controller
     $orderBy=$this->input->get('sortBy');
     $searchString=$this->input->get('search');
 
-    if($searchString) {
+    $getAdvanceSearch=$this->input->get('asearch');
+    $search=array(
+      'type_of_objects' => $getAdvanceSearch[0],
+      'no_objects' => $getAdvanceSearch[1],
+      'overall_cost' => $getAdvanceSearch[2],
+      'type' => $getAdvanceSearch[3],
+      'operation_name' => $getAdvanceSearch[4],
+      'airport_name' => $getAdvanceSearch[5],
+      'rnum' => $getAdvanceSearch[6],
+      'location_name' => $getAdvanceSearch[7],
+      'description' => $getAdvanceSearch[8],
+      'cost' => $getAdvanceSearch[9],
+      'shipping_date' => $getAdvanceSearch[10],
+    );
+
+    $data['advanceSearchExist']=0;
+    $data['searchExist']=0;
+    $data['searchResult']='';
+
+    if($search['type_of_objects'] or $search['no_objects'] or $search['overall_cost'] or $search['type'] or $search['operation_name'] or $search['airport_name'] or $search['rnum'] or $search['location_name'] or $search['description'] or $search['cost'] or $search['shipping_date']) {
+      $search_count= $this->CargoModel->advance_search_count($search);
+      if($search_count==0){
+        $data['advanceSearchExist']=0;
+        $data['searchResult']='No results';
+      }
+      else {
+        $data['advanceSearchExist']=1;
+      }
+    }
+    else if($searchString) {
       $search_count= $this->CargoModel->search_gov_proj_count($searchString);
       $data['searchString']=$searchString;
       if($search_count==0){
@@ -137,7 +166,20 @@ class Cargoes extends CI_Controller
     }
 
     //*************************************PAGINATION***********************************//
-    if($data['searchExist']){
+    if($data['advanceSearchExist']){
+      $data['gov_proj']=$this->CargoModel->advance_search($limit_per_page,($start_index-1)*10,$sort,$order,$search);
+      $data['searchResult']=$this->CargoModel->advance_search_count($search).' result/s.';
+      $config['total_rows'] = $this->CargoModel->advance_search_count($search);
+      $data['total_rows'] = $config['total_rows'];
+      $data['sort']=$orderBy;
+      $config['base_url'] = base_url().'users/Cargoes/index';
+      $config['first_url']= base_url().'users/Cargoes/index?sortBy='.$orderBy.'&asearch%5B%5D='.$search['type_of_objects'].'&asearch%5B%5D='.$search['no_objects'].'&asearch%5B%5D='.$search['overall_cost'].'&asearch%5B%5D='.$search['type'].'&asearch%5B%5D='.$search['operation_name'].'&asearch%5B%5D='.$search['airport_name'].'&asearch%5B%5D='.$search['rnum'].'&asearch%5B%5D='.$search['location_name'].'&asearch%5B%5D='.$search['description'].'&asearch%5B%5D='.$search['cost'].'&asearch%5B%5D='.$search['shipping_date'].'';
+      $data['search']=$search;
+      $config['per_page'] = $limit_per_page;
+      $config['uri_segment'] = 4;
+      $config['suffix'] = '?sortBy='.$orderBy.'&asearch%5B%5D='.$search['type_of_objects'].'&asearch%5B%5D='.$search['no_objects'].'&asearch%5B%5D='.$search['overall_cost'].'&asearch%5B%5D='.$search['type'].'&asearch%5B%5D='.$search['operation_name'].'&asearch%5B%5D='.$search['airport_name'].'&asearch%5B%5D='.$search['rnum'].'&asearch%5B%5D='.$search['location_name'].'&asearch%5B%5D='.$search['description'].'&asearch%5B%5D='.$search['cost'].'&asearch%5B%5D='.$search['shipping_date'].'';
+    }
+    else if($data['searchExist']){
       $data['gov_proj']=$this->CargoModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);
       $config['total_rows'] = $this->CargoModel->search_gov_proj_count($searchString);
       $data['total_rows'] = $config['total_rows'];

@@ -40,6 +40,50 @@ class ConstructModel extends CI_Model
 		return $query->num_rows();
 	}
 
+	function advance_search_count($str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('v_project_construction');
+		if($str['location_name'])
+			$this->db->like('location_name',$str['location_name'], 'both');
+		if($str['description'])
+			$this->db->like('description',$str['description'], 'both');
+		if($str['cost'])
+			$this->db->like('cost',$str['cost'], 'both');
+		if($str['contractor_name'])		
+			$this->db->like('contractor_name',$str['contractor_name'], 'both');
+		if($str['actual_start'])
+			$this->db->like('actual_start',$str['actual_start'], 'both');
+		if($str['actual_completion'])
+			$this->db->like('actual_completion',$str['actual_completion'], 'both');
+		$query = $this->db->get();
+		return $query->num_rows();
+	}
+
+	function advance_search($limit,$start,$sort,$order,$str)
+	{
+		$this->db->select('*');
+		$this -> db -> from('v_project_construction');
+		if($str['location_name'])
+			$this->db->like('location_name',$str['location_name'], 'both');
+		if($str['description'])
+			$this->db->like('description',$str['description'], 'both');
+		if($str['cost'])
+			$this->db->like('cost',$str['cost'], 'both');
+		if($str['contractor_name'])		
+			$this->db->like('contractor_name',$str['contractor_name'], 'both');
+		if($str['actual_start'])
+			$this->db->like('actual_start',$str['actual_start'], 'both');
+		if($str['actual_completion'])
+			$this->db->like('actual_completion',$str['actual_completion'], 'both');
+		
+		if($sort!='default')
+			$this->db->order_by($sort,$order);
+		$this->db->limit($limit,$start);
+		$query = $this->db->get();
+		return $query;
+	}
+
 	function search_gov_proj($limit,$start,$sort,$order,$str)
 	{
 		$this->db->select('*');

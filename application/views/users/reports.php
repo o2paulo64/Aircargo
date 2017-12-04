@@ -32,7 +32,13 @@
 			    
 			</div>
 			<div class="col m3"  id='sortby'>
-				<select class='input-field' onchange="javascript:handleSelect(this,'users/Reports?search=<?php echo $searchString; ?>&sortBy=')">
+				<?php 
+					if($advanceSearchExist)
+						$string='users/Reports/index?asearch%5B%5D='.$search['operation_name'].'&asearch%5B%5D='.$search['airport_name'].'&asearch%5B%5D='.$search['type'].'&asearch%5B%5D='.$search['classification'].'&asearch%5B%5D='.$search['description'].'';
+					else
+						$string='users/Reports?search='.$searchString.'';
+				?>
+				<select class='input-field' onchange="javascript:handleSelect(this,'<?php echo $string;?>&sortBy=')">
 					<option value="" disabled selected>Sort by...</option>
 					<option value="default">Default</option>
 					<optgroup label="Ascending Order">
@@ -53,7 +59,48 @@
 			</div>
 
 		</div>
+		<div id="modal1" class="modal">
+			<div class="modal-content">
+				<h5>Advance Search</h5>
+				<div class='container'>
+					<div class='section'></div>
+					<div class='row'></div>
+					<div class='row'>
+							<form id='search-bar-css' action=<?php echo base_url('users/Reports?'); ?> method="GET">
+							    <div clas='section'>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="operation_name">Operation Name</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="airport_name">Airport Name</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="aircraft_type">Aircraft Type</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="classification">Classification</label>
+							        </div>
+							        <div class="input-field col s12">
+							          <input name="asearch[]" type="text" class="validate">
+							          <label for="description">Description</label>
+							        </div>
+							    </div>
+						        <div class='section'>
+									<div class='col m4'>
+										<button type='submit' class='waves-effect waves-light btn'>Search</button>	
+									</div>
+								</div>
+						    </form>   
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class='container' id='table-container'>
+			<a class='modal-trigger' style='font-size: 11px; padding-bottom: 20px;' href="#modal1"> Advance Search</a><br>
 			<label style='float: left;'><?php echo $searchResult;?></label>
 			<label style='float: right;'>Sorted by <?php echo $sort;?></label>
 			<table class='responsive-table bordered highlight centered blue-grey darken-1 white-text'>

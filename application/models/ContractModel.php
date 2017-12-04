@@ -54,7 +54,7 @@ class ContractModel extends CI_Model
 		return $query->num_rows();
 	}
 
-	function advance_search($sort,$order,$str)
+	function advance_search($limit,$start,$sort,$order,$str)
 	{
 		$this->db->select('*');
 		$this -> db -> from('v_project_contractor');
@@ -69,7 +69,7 @@ class ContractModel extends CI_Model
 		
 		if($sort!='default')
 			$this->db->order_by($sort,$order);
-		// $this->db->limit($limit,$start);
+		$this->db->limit($limit,$start);
 		$query = $this->db->get();
 		return $query;
 	}

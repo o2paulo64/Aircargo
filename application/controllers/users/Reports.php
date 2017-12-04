@@ -25,7 +25,30 @@ class Reports extends CI_Controller
     $orderBy=$this->input->get('sortBy');
     $searchString=$this->input->get('search');
 
-    if($searchString) {
+    $getAdvanceSearch=$this->input->get('asearch');
+    $search=array(
+      'operation_name' => $getAdvanceSearch[0],
+      'airport_name' => $getAdvanceSearch[1],
+      'type' => $getAdvanceSearch[2],
+      'classification' => $getAdvanceSearch[3],
+      'description' => $getAdvanceSearch[4]
+    );
+
+    $data['advanceSearchExist']=0;
+    $data['searchExist']=0;
+    $data['searchResult']='';
+
+    if($search['operation_name'] or $search['airport_name'] or $search['type'] or $search['classification'] or $search['description']) {
+      $search_count= $this->ReportModel->advance_search_count($search);
+      if($search_count==0){
+        $data['advanceSearchExist']=0;
+        $data['searchResult']='No results';
+      }
+      else {
+        $data['advanceSearchExist']=1;
+      }
+    }
+    else if($searchString) {
       $search_count= $this->ReportModel->search_gov_proj_count($searchString);
       $data['searchString']=$searchString;
       if($search_count==0){
@@ -89,7 +112,20 @@ class Reports extends CI_Controller
     }
 
     //*************************************PAGINATION***********************************//
-    if($data['searchExist']){
+    if($data['advanceSearchExist']){
+      $data['gov_proj']=$this->ReportModel->advance_search($limit_per_page,($start_index-1)*10,$sort,$order,$search);
+      $data['searchResult']=$this->ReportModel->advance_search_count($search).' result/s.';
+      $config['total_rows'] = $this->ReportModel->advance_search_count($search);
+      $data['total_rows'] = $config['total_rows'];
+      $data['sort']=$orderBy;
+      $config['base_url'] = base_url().'users/Reports/index';
+      $config['first_url']= base_url().'users/Reports/index?sortBy='.$orderBy.'&asearch%5B%5D='.$search['operation_name'].'&asearch%5B%5D='.$search['airport_name'].'&asearch%5B%5D='.$search['type'].'&asearch%5B%5D='.$search['classification'].'&asearch%5B%5D='.$search['description'].'';
+      $data['search']=$search;
+      $config['per_page'] = $limit_per_page;
+      $config['uri_segment'] = 4;
+      $config['suffix'] = '?sortBy='.$orderBy.'&asearch%5B%5D='.$search['operation_name'].'&asearch%5B%5D='.$search['airport_name'].'&asearch%5B%5D='.$search['type'].'&asearch%5B%5D='.$search['classification'].'&asearch%5B%5D='.$search['description'].'';
+    }
+    else if($data['searchExist']){
       $data['gov_proj']=$this->ReportModel->search_gov_proj($limit_per_page,($start_index-1)*10,$sort,$order,$searchString);
       $config['total_rows'] = $this->ReportModel->search_gov_proj_count($searchString);
       $data['total_rows'] = $config['total_rows'];
